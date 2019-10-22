@@ -1,0 +1,2 @@
+# Dominik
+ASSISTENTE VIRTUAL
