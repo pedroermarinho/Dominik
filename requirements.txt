@@ -1,0 +1,11 @@
+blinker
+chatterbot
+fuzzywuzzy
+telepot
+bs4
+google
+wikipedia
+pyqt5
+pymysql
+pytz
+python-Levenshtein

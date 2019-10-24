@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>690</width>
+    <height>442</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>10</y>
+     <width>121</width>
+     <height>431</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="TelegramButton">
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Telegram</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="WhatsappButton">
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>WhatsApp</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="NativoButton">
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Nativo</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QListView" name="MensagemList">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>10</y>
+     <width>541</width>
+     <height>371</height>
+    </rect>
+   </property>
+   <property name="movement">
+    <enum>QListView::Free</enum>
+   </property>
+   <property name="flow">
+    <enum>QListView::TopToBottom</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="EnviarButton">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>390</y>
+     <width>111</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Enviar</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="MensagemText">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>390</y>
+     <width>431</width>
+     <height>41</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
