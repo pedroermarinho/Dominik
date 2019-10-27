@@ -6,7 +6,7 @@ from Palavras_Chave import Palavra_Chave
 from BD import banco_de_dados
 from Comandos import Comando
 from Arduino_CMD import arduino_cmd
-import Tokens
+from tokens.tokens import Tokens
 from threading import Thread
 
 arduino_comando = arduino_cmd()
