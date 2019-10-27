@@ -1,8 +1,9 @@
 import pymysql
 import random
 from Questao import quest
-import Tokens
-
+from tokens.tokens import Tokens
+import shutil
+import os
 
 class banco_de_dados(object):
     print("banco_de_dados")
@@ -164,6 +165,50 @@ class banco_de_dados(object):
         else:
             print("sem conexão com o banco de dados ")
 
+    def add_curiosidade(self):
+        print("add_curiosidade")
+        if (self.conexao is not None):
+            # try:
+            for _arquivo in os.listdir('assbot/ass_diversos/curiosidade'):  # percorrer todos os arquivos na pasta chats
+                if _arquivo.endswith(".txt"):
+                    print(_arquivo)  # mostrar o nome do aquivo que esta sendo lido
+                    linhas = open('assbot/ass_diversos/curiosidade/' + _arquivo, 'r').readlines()  # vamos ler linhas
+                    for linha in linhas:
+                        linha = linha.replace('\n', '')
+                        self.cursor.execute("INSERT INTO curiosidades (curiosidade) VALUES (\'" + str(
+                            linha) + "\')")  # Executa o comando:
+                        self.conexao.commit()  # Efetua um commit no banco de dados.
+
+                    shutil.move('assbot/ass_diversos/curiosidade/' + _arquivo,
+                                'assbot/ass_diversos/curiosidade/ja_treinados/')  # mover os arquivos ja treinados para outra pasta para que não sejam treinados novamente
+            # except:
+            #     print("Erro função-> treino curiosidade")
+        else:
+            print("sem conexão com o banco de dados ")
+
+    def add_quiz(self):
+        print("add_quiz")
+        if (self.conexao is not None):
+            # try:
+            for _arquivo in os.listdir('assbot/quiz'):  # percorrer todos os arquivos na pasta chats
+                if _arquivo.endswith(".txt"):
+                    print(_arquivo)  # mostrar o nome do aquivo que esta sendo lido
+                    arquivo = open('assbot/quiz/' + _arquivo, 'r').readlines()
+                    for comando in arquivo:  # percorendo todos os comandos
+                        comando = comando.replace('\n', '')  # deletando as quebras de linha
+                        parts = comando.split('||')  # separando mensaguem de comando // dicionario de comandos
+                        self.cursor.execute(
+                            "INSERT INTO quiz (pergunta, alternativa1, alternativa2, alternativa3, alternativa4, alternativa5, resposta) VALUES (\'" + str(
+                                parts[0]) + "\',\'" + str(parts[1]) + "\',\'" + str(parts[2]) + "\',\'" + str(
+                                parts[3]) + "\',\'" + str(parts[4]) + "\',\'" + str(parts[5]) + "\',\'" + str(
+                                parts[6]) + "\')")
+                        self.conexao.commit()  # Efetua um commit no banco de dados.
+                    shutil.move('assbot/quiz/' + _arquivo,
+                                'assbot/quiz/ja_treinados/')  # mover os arquivos ja treinados para outra pasta para que não sejam treinados novamente
+            # except:
+            #     print("Erro função-> treino quiz")
+        else:
+            print("sem conexão com o banco de dados ")
     def Numero_aleatorio_piada(self):
         print("Numero_aleatorio_piada")
         if (self.conexao is not None):
