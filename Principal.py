@@ -7,7 +7,7 @@ import logging
 from Palavras_Chave import Palavra_Chave
 from Comandos import Comando
 from BD import banco_de_dados
-import Tokens
+from tokens.tokens import Tokens
 from Arduino_CMD import arduino_cmd
 from threading import Thread
 
