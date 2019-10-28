@@ -1,6 +1,5 @@
-from flask import Flask, render_template
-
-app = Flask(__name__)
+from flask import render_template
+from app import app
 
 
 @app.route('/')
@@ -12,33 +11,41 @@ def home():
 def about():
     return render_template('about.html')
 
+
 @app.route('/index')
 def index():
     return render_template('index.html')
+
 
 @app.route('/blank')
 def blank():
     return render_template('blank.html')
 
+
 @app.route('/charts')
 def charts():
     return render_template('charts.html')
+
 
 @app.route('/404')
 def er404():
     return render_template('404.html')
 
+
 @app.route('/forgot-password')
 def forgotpassword():
     return render_template('forgot-password.html')
+
 
 @app.route('/login')
 def login():
     return render_template('login.html')
 
+
 @app.route('/register')
 def register():
     return render_template('register.html')
+
 
 @app.route('/tables')
 def tables():
@@ -46,5 +53,3 @@ def tables():
 
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
