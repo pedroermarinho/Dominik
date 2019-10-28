@@ -10,3 +10,6 @@ pytz
 python-Levenshtein
 Flask
 arduino-python3
+flask-sqlalchemy
+flask-migrate
+flask-script
