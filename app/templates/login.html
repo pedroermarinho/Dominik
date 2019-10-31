@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
 
@@ -20,36 +20,49 @@
 </head>
 
 <body class="bg-dark">
-
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-warning">
+        <ul class=flashes>
+          {% for message in messages %}
+           <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  {% endwith %}
   <div class="container">
     <div class="card card-login mx-auto mt-5">
       <div class="card-header">Login</div>
       <div class="card-body">
-        <form>
+        <form action="" method="post">
+          {{ login_form.csrf_token }}
           <div class="form-group">
             <div class="form-label-group">
-              <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
-              <label for="inputEmail">Email address</label>
+              {{ login_form.username(class="form-control", placeholder="Email address" , id="inputEmail", autofocus="autofocus") }}
+              <label for="inputEmail">Usuário</label>
             </div>
           </div>
           <div class="form-group">
             <div class="form-label-group">
-              <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="required">
-              <label for="inputPassword">Password</label>
+              {{ login_form.password(id="inputPassword", class="form-control", placeholder="Password")}}
+              <label for="inputPassword">Senha</label>
             </div>
           </div>
           <div class="form-group">
             <div class="checkbox">
               <label>
-                <input type="checkbox" value="remember-me">
-                Remember Password
+                {{ login_form.remember(value="remember-me")}}
+<!--                <input type="checkbox" value="remember-me">-->
+                Lembrar Senha
               </label>
             </div>
           </div>
-          <a class="btn btn-primary btn-block" href="index">Login</a>
+<!--          <a  href="index">Login</a>-->
+          <button type="submit" class="btn btn-primary btn-block" >Login</button>
         </form>
         <div class="text-center">
-          <a class="d-block small mt-3" href="register">Register an Account</a>
+        <!-- <a class="d-block small mt-3" href="register">Register an Account</a> -->
           <a class="d-block small" href="forgot-password">Forgot Password?</a>
         </div>
       </div>

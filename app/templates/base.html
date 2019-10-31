@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
 
@@ -26,7 +26,7 @@
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand mr-1" href="index">Start Bootstrap</a>
+    <a class="navbar-brand mr-1" href="index">Dominik</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
@@ -52,10 +52,10 @@
           <span class="badge badge-danger">9+</span>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Açao</a>
+          <a class="dropdown-item" href="#">Outra ação</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <a class="dropdown-item" href="#">Algo mais aqui</a>
         </div>
       </li>
       <li class="nav-item dropdown no-arrow mx-1">
@@ -64,10 +64,10 @@
           <span class="badge badge-danger">7</span>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Açao</a>
+          <a class="dropdown-item" href="#">Outra ação</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <a class="dropdown-item" href="#">Algo mais aqui</a>
         </div>
       </li>
       <li class="nav-item dropdown no-arrow">
@@ -75,10 +75,13 @@
           <i class="fas fa-user-circle fa-fw"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-          <a class="dropdown-item" href="#">Settings</a>
-          <a class="dropdown-item" href="#">Activity Log</a>
+          {% if current_user.is_authenticated %}
+              <p class="dropdown-item" >Hi {{ current_user.name }}!</p>
+          {% endif %}
+          <a class="dropdown-item" href="{{url_for('settings')}}">Configurações</a>
+          <a class="dropdown-item" href="#">Registro de atividade</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+          <a class="dropdown-item" href={{url_for('logout')}}>Sair</a>
         </div>
       </li>
     </ul>
@@ -92,38 +95,53 @@
       <li class="nav-item ">
         <a class="nav-link" href="index">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span>
+          <span>Painel de Controle</span>
         </a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-fw fa-folder"></i>
-          <span>Pages</span>
+          <span>Páginas</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <h6 class="dropdown-header">Login Screens:</h6>
-          <a class="dropdown-item" href="login">Login</a>
-          <a class="dropdown-item" href="register">Register</a>
-          <a class="dropdown-item" href="forgot-password">Forgot Password</a>
+          <h6 class="dropdown-header">Telas de login:</h6>
+          <a class="dropdown-item" href="login">Conecte-se</a>
+          <a class="dropdown-item" href="register">inscrever</a>
+          <a class="dropdown-item" href="forgot-password">Esqueceu a senha</a>
           <div class="dropdown-divider"></div>
-          <h6 class="dropdown-header">Other Pages:</h6>
+          <h6 class="dropdown-header">Outras páginas:</h6>
           <a class="dropdown-item" href="404">404 Page</a>
-          <a class="dropdown-item" href="blank">Blank Page</a>
+          <a class="dropdown-item" href="blank">Página em branco</a>
         </div>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="charts">
           <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span></a>
+          <span>Gráficos</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="tables">
           <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
+          <span>Tabelas</span></a>
       </li>
     </ul>
 
     <div id="content-wrapper">
+
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="alert alert-warning">
+            <ul class=flashes>
+              {% for message in messages %}
+               <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      {% endwith %}
+
+
       <!--  inicio do centro do site  -->
 
       {% block content %}
@@ -155,15 +173,15 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Pronto para partir?</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-body">Selecione "Sair" abaixo se você estiver pronto para terminar sua sessão atual.</div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login">Logout</a>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+          <a class="btn btn-primary" href="login">Sair</a>
         </div>
       </div>
     </div>
