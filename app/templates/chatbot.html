@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block item_chatbot %}active{% endblock %}
+{% block content %}
+
+<div class="container-fluid h-100">
+    <div class="row justify-content-center h-100">
+        <div class="col-md-8 col-xl-6 chat-chatbot">
+            <div class="card-chatbot card" >
+                <div class="card-header-chatbot  card-header msg_head-chatbot">
+                    <div class="d-flex bd-highlight">
+                        <div class="img_cont-chatbot">
+                            <img src="{{ url_for('static', filename='img/adm.png')}}" class="rounded-circle user_img-chatbot">
+                            <span class="online_icon-chatbot"></span>
+                        </div>
+                        <div class="user_info-chatbot">
+                            <span>Dominik</span>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="card-body msg_card_body-chatbot" id="chatbox">
+
+                </div>
+                
+                <div class="card-footer-chatbot card-footer">
+                    <div class="input-group" id="userInput">
+                        <input id="textInput" class="form-control type_msg-chatbot" type="text" name="msg" placeholder="Type your message...">
+                        <div class="input-group-append">
+                            <button id="buttonInput" class="input-group-text send_btn-chatbot" type="submit" value="input"><i class="fas fa-location-arrow"></i></button>
+                        </div>
+                        <script>
+                                function getResponse() {
+                                var vdata = new Date();
+                                var hora = vdata.getHours + ':' + vdata.getMinutes + ':' + vdata.getSeconds;
+                                $("#chatbox").animate({scrollTop: $('#chatbox').prop("scrollHeight")}, 500)    ;
+                                    let userText = $("#textInput").val();
+                                    //let userHtml = '<p class="userText"><span>' + userText + '</span></p>';
+                                    let userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer-chatbot">' + userText + ' <span class="msg_time-chatbot">'+hora+'</span> </div><div class="img_cont_msg-chatbot"><img src="{{ url_for("static", filename="img/user.png")}}" class="rounded-circle user_img_msg-chatbot"></div></div>';
+
+                                    $("#textInput").val("");
+                                    $("#chatbox").append(userHtml);
+                                    document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+                                    $.get("/get", { msg: userText }).done(function(data) {
+                                    //var botHtml = '<p class="botText"><span>' + data + '</span></p>';
+                                    var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg-chatbot"><img src="{{ url_for("static", filename="img/adm.png")}}" class="rounded-circle user_img_msg-chatbot"></div><div class="msg_cotainer_send-chatbot">' + data + ' <span class="msg_time_send-chatbot">'+hora+'</span> </div></div>';;
+                                    $("#chatbox").append(botHtml);
+                                    document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+                                    
+                                    });
+                                }
+                                $("#textInput").keypress(function(e) {
+                                //if enter key is pressed
+                                    if(e.which == 13) {
+                                        getResponse();
+                                    }
+                                });
+                                $("#buttonInput").click(function() {
+                                    getResponse();
+                                });
+
+                                
+                                 
+                            </script>
+                            
+                    </div>
+                
+                
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+{%  endblock %}
+
+
+
