@@ -1,6 +1,6 @@
 # -*- coding:utf-8  -*-
 class Tokens:
-    host = ""
+    host = "TE"
     db = ""
     user = ""
     passwd = ""
