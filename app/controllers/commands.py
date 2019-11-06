@@ -1,16 +1,16 @@
 from datetime import datetime
-from Palavras_Chave import Palavra_Chave
+from app.controllers.key_words import Palavra_Chave
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
-from BD import banco_de_dados
-from Arduino_CMD import arduino_cmd
+from app.models.functions_db import Database
+from app.controllers.arduino_cmd import arduino_cmd
 from threading import Thread
 
 class Comando:
     print('class comando')
 
     palavra_chave = Palavra_Chave()
-    base_de_dados = banco_de_dados()
+    base_de_dados = Database()
     global arduino_comando
 
     def __init__(self, _arduino=arduino_cmd()):
@@ -76,7 +76,7 @@ class Comando:
             return self.base_de_dados.get_curiosidade()
 
         # ------------------------------------------------------------------------------
-            Thread(target=arduino_comando.cmd_televisao_off()).start()
+        #     Thread(target=arduino_comando.cmd_televisao_off()).start()
 
         elif cmd == 'cmd_luz_quarto_1_on':
             Thread(target=self.arduino_comando.cmd_luz_quarto_1_on()).start()

@@ -1,11 +1,11 @@
 import wikipedia
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from BD import banco_de_dados
+from app.models.functions_db import Database
 
 
 class Palavra_Chave:
-    base_de_dados = banco_de_dados()
+    base_de_dados = Database()
 
     wikipedia.set_lang('pt')  # determina que todas as pesquisas da wikipedia sejam em portugues
     palavras_chaves_wikipedia = []  # palavras chaves para pesquisas na wikipedia

@@ -1,14 +1,15 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, login_required, current_user
 
 from app import app, db, login_manager
 
-from app.models.forms import LoginForm , RegisterForm
+from app.models.forms import LoginForm, RegisterForm
 
 
 from app.models.tables import User
 
-
+from app.controllers.chat_bot import Dominik
+bot_dominik = Dominik()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -140,24 +141,15 @@ def test(info):
         return render_template('test.html', info="ok")
 
 
-from flask import Flask, render_template, request
-from chatterbot import ChatBot
-from chatterbot.trainers import ChatterBotCorpusTrainer
-
-portugueseBot = ChatBot("Chatterbot", storage_adapter="chatterbot.storage.SQLStorageAdapter")
-trainer = ChatterBotCorpusTrainer(portugueseBot)
-# trainer.train("chatterbot.corpus.portuguese") #train the chatter bot for english
-
 #define app routes
 @app.route("/chatbot")
 def chatbot():
     return render_template("chatbot.html")
 
 @app.route("/get")
-#function for the bot response
 def get_bot_response():
     userText = request.args.get('msg')
-    return str(portugueseBot.get_response(userText))
+    return str(bot_dominik.mensagem_bot_resposta(bot_dominik.mensagem_bot_pergunta(userText)))
 
 
 

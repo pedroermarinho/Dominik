@@ -1,130 +1,130 @@
 import pymysql
 import random
-from Questao import quest
+from app.models.question import quest
 from tokens.tokens import Tokens
 import shutil
 import os
 
-class banco_de_dados(object):
+
+class Database(object):
     print("banco_de_dados")
-    palavras_chaves_wikipedia = []  # palavras chaves para pesquisas na wikipedia
-    palavras_chaves_google = []  # palavras chaves para pesquisas no google
-    palavras_chaves_definicao = []  # palavras chaves para pesquisas no dicionario
-    dicionario_cmd = {}  # criando um dicionario comandos
-    dicionario_mensagem_cmd = {}  # criando um dicionario comandos de menagem 
-    conexao = None
+    keywords_wikipedia = []  # palavras chaves para pesquisas na wikipedia
+    keywords_google = []  # palavras chaves para pesquisas no google
+    definition_words = []  # palavras chaves para pesquisas no dicionario
+    dic_cmd = {}  # criando um dicionario comandos
+    dic_message_cmd = {}  # criando um dicionario comandos de menagem
+    connection = None
     cursor = None
 
     def __init__(self):
-        self.conexao_on()
+        self.connection_on()
 
-    def conexao_on(self):
+    def connection_on(self):
 
         try:
             # Abrimos uma conexão com o banco de dados:
-            self.conexao = pymysql.connect(host=Tokens.host, db=Tokens.db, user=Tokens.user,
-                                           passwd=Tokens.passwd)
+            self.connection = pymysql.connect(host=Tokens.host, db=Tokens.db, user=Tokens.user,
+                                              passwd=Tokens.passwd)
             # Cria um cursor:
-            self.cursor = self.conexao.cursor()
+            self.cursor = self.connection.cursor()
         except:
             print("erro conexão banco de dados")
-            self.conexao = None
+            self.connection = None
             self.cursor = None
 
-    def add_base_de_usuarios(self, id, nome=None):
+    def add_base_de_users(self, _id, nome=None):
         print("add_base_de_usuarios")
-        if self.conexao is not None:
+        if self.connection is not None:
             try:
-                self.cursor.execute("INSERT INTO base_de_usuarios VALUES (\'" + str(id) + "\',\'" + str(
+                self.cursor.execute("INSERT INTO base_de_usuarios VALUES (\'" + str(_id) + "\',\'" + str(
                     nome) + "\')")  # Executa o comando:
-                self.conexao.commit()  # Efetua um commit no banco de dados.
+                self.connection.commit()  # Efetua um commit no banco de dados.
 
 
             except:
                 # print("Erro função-> add_base_de_usuarios")
-                self.conexao_on()
+                self.connection_on()
         else:
             print("sem conexão com o banco de dados ")
 
-
-    def add_nova_palavra(self, nome=None):
+    def add_new_word(self, nome=None):
         print("add_nova_palavra")
-        if self.conexao is not None:
+        if self.connection is not None:
             try:
                 self.cursor.execute("INSERT INTO `novas_palavras`(`texto`) VALUES (\'" + str(
                     nome) + "\')")  # Executa o comando:
-                self.conexao.commit()  # Efetua um commit no banco de dados.
-
+                self.connection.commit()  # Efetua um commit no banco de dados.
 
             except:
                 print("Erro função-> add_nova_palavra")
-                self.conexao_on()
+                self.connection_on()
         else:
             print("sem conexão com o banco de dados ")
 
-    def add_pontucao_acetou(self, cod, ultima_pergunta):
-        print("add_pontucao_acetou")
-        if self.conexao is not None:
+    # adicione ponto positivo
+    def add_positive_point(self, cod, last_question):
+        print("add_positive_point")
+        if self.connection is not None:
             try:
                 self.cursor.execute("INSERT INTO usuario  VALUES (\'" + str(cod) + "\',\'" + str(2) + "\'," + str(
-                    ultima_pergunta) + ")")  # Executa o comando:
-                self.conexao.commit()  # Efetua um commit no banco de dados.
+                    last_question) + ")")  # Executa o comando:
+                self.connection.commit()  # Efetua um commit no banco de dados.
             except:
                 try:
-                    ultima_pergunta_banco = self.get_ultima_resposta(cod)
+                    ultima_pergunta_banco = self.get_last_question(cod)
 
-                    print(str(ultima_pergunta_banco) + "==" + str(ultima_pergunta))
+                    print(str(ultima_pergunta_banco) + "==" + str(last_question))
 
-                    if ultima_pergunta_banco != ultima_pergunta:
+                    if ultima_pergunta_banco != last_question:
                         self.cursor.execute("UPDATE usuario SET pontuacao = (pontuacao + 2) WHERE id =\'" + str(
                             cod) + "\'")  # Executa o comando:
-                        self.conexao.commit()  # Efetua um commit no banco de dados.
+                        self.connection.commit()  # Efetua um commit no banco de dados.
                         self.cursor.execute(
-                            "UPDATE usuario SET ultima_pergunta = " + str(ultima_pergunta) + " WHERE id =\'" + str(
+                            "UPDATE usuario SET ultima_pergunta = " + str(last_question) + " WHERE id =\'" + str(
                                 cod) + "\'")
-                        self.conexao.commit()  # Efetua um commit no banco de dados.
+                        self.connection.commit()  # Efetua um commit no banco de dados.
 
                 except:
                     print("Erro função-> add_pontucao_acetou")
-                    self.conexao_on()
+                    self.connection_on()
         else:
             print("sem conexão com o banco de dados ")
 
-    def add_pontucao_errou(self, cod, ultima_pergunta):
+    def add_negative_point(self, cod, ultima_pergunta):
         print("add_pontucao_errou id =" + str(cod) + " ultima_pergunta =" + str(ultima_pergunta))
 
-        if self.conexao is not None:
+        if self.connection is not None:
             try:
                 self.cursor.execute("INSERT INTO usuario  VALUES (\'" + str(cod) + "\',\'" + str(-1) + "\'," + str(
                     ultima_pergunta) + ")")  # Executa o comando:
-                self.conexao.commit()  # Efetua um commit no banco de dados.
+                self.connection.commit()  # Efetua um commit no banco de dados.
             except:
 
                 try:
-                    ultima_pergunta_banco = self.get_ultima_resposta(cod)
+                    ultima_pergunta_banco = self.get_last_question(cod)
 
                     print(str(ultima_pergunta_banco) + "==" + str(ultima_pergunta))
 
                     if ultima_pergunta_banco != ultima_pergunta:
                         self.cursor.execute("UPDATE usuario SET pontuacao = (pontuacao - 1)   WHERE id =\'" + str(
                             cod) + "\'")  # Executa o comando:
-                        self.conexao.commit()  # Efetua um commit no banco de dados.
+                        self.connection.commit()  # Efetua um commit no banco de dados.
                         self.cursor.execute(
                             "UPDATE usuario SET ultima_pergunta = (" + str(ultima_pergunta) + ") WHERE id =\'" + str(
                                 cod) + "\'")  # Executa o comando:
-                        self.conexao.commit()  # Efetua um commit no banco de dados.
+                        self.connection.commit()  # Efetua um commit no banco de dados.
 
                 except:
                     print("Erro função-> add_pontucao_errou")
-                    self.conexao_on()
+                    self.connection_on()
         else:
             print("sem conexão com o banco de dados ")
 
-    def get_ultima_resposta(self, cod):
+    def get_last_question(self, cod):
         print("get_ultima_resposta")
-        if self.conexao is not None:
+        if self.connection is not None:
             try:
-                self.conexao.commit()  # Efetua um commit no banco de dados.
+                self.connection.commit()  # Efetua um commit no banco de dados.
                 self.cursor.execute("SELECT ultima_pergunta FROM usuario WHERE id = \'" + str(cod) + "\'")
 
                 results = self.cursor.fetchall()
@@ -138,14 +138,14 @@ class banco_de_dados(object):
                 return result
             except:
                 print("Erro função-> get_ultima_resposta")
-                self.conexao_on()
+                self.connection_on()
                 return 0
         else:
             print("sem conexão com o banco de dados ")
 
-    def get_pontuacao(self, id):
+    def get_point(self, id):
         print("get_pontuacao")
-        if (self.conexao is not None):
+        if (self.connection is not None):
             try:
                 self.cursor.execute("SELECT pontuacao FROM usuario WHERE id = \'" + str(id) + "\'")
 
@@ -160,14 +160,14 @@ class banco_de_dados(object):
                 return result
             except:
                 print("Erro função-> get_pontuacao")
-                self.conexao_on()
+                self.connection_on()
                 return 0
         else:
             print("sem conexão com o banco de dados ")
 
     def add_curiosidade(self):
         print("add_curiosidade")
-        if (self.conexao is not None):
+        if (self.connection is not None):
             # try:
             for _arquivo in os.listdir('assbot/ass_diversos/curiosidade'):  # percorrer todos os arquivos na pasta chats
                 if _arquivo.endswith(".txt"):
@@ -177,7 +177,7 @@ class banco_de_dados(object):
                         linha = linha.replace('\n', '')
                         self.cursor.execute("INSERT INTO curiosidades (curiosidade) VALUES (\'" + str(
                             linha) + "\')")  # Executa o comando:
-                        self.conexao.commit()  # Efetua um commit no banco de dados.
+                        self.connection.commit()  # Efetua um commit no banco de dados.
 
                     shutil.move('assbot/ass_diversos/curiosidade/' + _arquivo,
                                 'assbot/ass_diversos/curiosidade/ja_treinados/')  # mover os arquivos ja treinados para outra pasta para que não sejam treinados novamente
@@ -188,7 +188,7 @@ class banco_de_dados(object):
 
     def add_quiz(self):
         print("add_quiz")
-        if (self.conexao is not None):
+        if (self.connection is not None):
             # try:
             for _arquivo in os.listdir('assbot/quiz'):  # percorrer todos os arquivos na pasta chats
                 if _arquivo.endswith(".txt"):
@@ -202,16 +202,17 @@ class banco_de_dados(object):
                                 parts[0]) + "\',\'" + str(parts[1]) + "\',\'" + str(parts[2]) + "\',\'" + str(
                                 parts[3]) + "\',\'" + str(parts[4]) + "\',\'" + str(parts[5]) + "\',\'" + str(
                                 parts[6]) + "\')")
-                        self.conexao.commit()  # Efetua um commit no banco de dados.
+                        self.connection.commit()  # Efetua um commit no banco de dados.
                     shutil.move('assbot/quiz/' + _arquivo,
                                 'assbot/quiz/ja_treinados/')  # mover os arquivos ja treinados para outra pasta para que não sejam treinados novamente
             # except:
             #     print("Erro função-> treino quiz")
         else:
             print("sem conexão com o banco de dados ")
+
     def Numero_aleatorio_piada(self):
         print("Numero_aleatorio_piada")
-        if (self.conexao is not None):
+        if (self.connection is not None):
             try:
                 self.cursor.execute("SELECT COUNT(*) FROM piadas")
                 conts = self.cursor.fetchall()
@@ -224,7 +225,7 @@ class banco_de_dados(object):
                 return int(random.randint(0, int(cont) - 1))
             except:
                 print("erro numero aleatorio piada")
-                self.conexao_on()
+                self.connection_on()
                 return int(0)
         else:
             print("sem conexão com o banco de dados ")
@@ -232,7 +233,7 @@ class banco_de_dados(object):
 
     def Numero_aleatorio_quiz(self):
         print("Numero_aleatorio_quiz")
-        if (self.conexao is not None):
+        if (self.connection is not None):
             try:
                 self.cursor.execute("SELECT COUNT(*) FROM quiz")
                 conts = self.cursor.fetchall()
@@ -244,7 +245,7 @@ class banco_de_dados(object):
                 return int(random.randint(0, int(cont) - 1))
             except:
                 print("erro numero aleatorio quiz")
-                self.conexao_on()
+                self.connection_on()
                 return int(1)
         else:
             print("sem conexão com o banco de dados ")
@@ -252,7 +253,7 @@ class banco_de_dados(object):
 
     def Numero_aleatorio_curiosidade(self):
         print("Numero_aleatorio_curiosidade")
-        if (self.conexao is not None):
+        if (self.connection is not None):
             try:
                 self.cursor.execute("SELECT COUNT(*) FROM curiosidades")
                 conts = self.cursor.fetchall()
@@ -264,7 +265,7 @@ class banco_de_dados(object):
                 return int(random.randint(0, int(cont) - 1))
             except:
                 print("erro numero aleatorio curiosidade")
-                self.conexao_on()
+                self.connection_on()
                 return int(0)
         else:
             print("sem conexão com o banco de dados ")
@@ -275,7 +276,7 @@ class banco_de_dados(object):
         if cod is None:
             cod = self.Numero_aleatorio_piada()
         print(cod)
-        if (self.conexao is not None):
+        if (self.connection is not None):
             try:
                 self.cursor.execute("SELECT piada FROM piadas WHERE id = \'" + str(cod) + "\'")
 
@@ -289,7 +290,7 @@ class banco_de_dados(object):
                 return result
             except:
                 print("erro get_piada")
-                self.conexao_on()
+                self.connection_on()
                 return None
         else:
             print("sem conexão com o banco de dados ")
@@ -299,7 +300,7 @@ class banco_de_dados(object):
         print("get_curiosidade")
         if cod is None:
             cod = self.Numero_aleatorio_curiosidade()
-        if (self.conexao is not None):
+        if (self.connection is not None):
             try:
                 self.cursor.execute("SELECT curiosidade FROM curiosidades WHERE id = \'" + str(cod) + "\'")
 
@@ -312,7 +313,7 @@ class banco_de_dados(object):
                 return result
             except:
                 print("erro get_quiz")
-                self.conexao_on()
+                self.connection_on()
                 return None
         else:
             print("sem conexão com o banco de dados ")
@@ -321,7 +322,7 @@ class banco_de_dados(object):
     def get_definicao(self):
         print("get_definicao")
 
-        if (self.conexao is not None):
+        if (self.connection is not None):
             try:
                 self.cursor.execute("SELECT texto FROM definicao")
 
@@ -330,12 +331,12 @@ class banco_de_dados(object):
                 n = 0
                 for res in results:
                     for resposta in res:
-                        self.palavras_chaves_definicao.insert(n, resposta)
+                        self.definition_words.insert(n, resposta)
                         n = n + 1
-                return self.palavras_chaves_definicao
+                return self.definition_words
             except:
                 print("erro get_definicao")
-                self.conexao_on()
+                self.connection_on()
                 return None
         else:
             print("sem conexão com o banco de dados ")
@@ -344,7 +345,7 @@ class banco_de_dados(object):
     def get_google(self):
         print("get_google")
 
-        if (self.conexao is not None):
+        if (self.connection is not None):
             try:
                 self.cursor.execute("SELECT texto FROM google")
 
@@ -353,12 +354,12 @@ class banco_de_dados(object):
                 n = 0
                 for res in results:
                     for resposta in res:
-                        self.palavras_chaves_google.insert(n, resposta)
+                        self.keywords_google.insert(n, resposta)
                         n = n + 1
-                return self.palavras_chaves_google
+                return self.keywords_google
             except:
                 print("erro get_google")
-                self.conexao_on()
+                self.connection_on()
                 return None
         else:
             print("sem conexão com o banco de dados ")
@@ -367,7 +368,7 @@ class banco_de_dados(object):
     def get_wikipedia(self):
         print("get_wikipedia")
 
-        if (self.conexao is not None):
+        if (self.connection is not None):
             try:
                 self.cursor.execute("SELECT texto FROM wikipedia")
 
@@ -376,12 +377,12 @@ class banco_de_dados(object):
                 n = 0
                 for res in results:
                     for resposta in res:
-                        self.palavras_chaves_wikipedia.insert(n, resposta)
+                        self.keywords_wikipedia.insert(n, resposta)
                         n = n + 1
-                return self.palavras_chaves_wikipedia
+                return self.keywords_wikipedia
             except:
                 print("erro get_wikipedia")
-                self.conexao_on()
+                self.connection_on()
                 return None
         else:
             print("sem conexão com o banco de dados ")
@@ -390,19 +391,19 @@ class banco_de_dados(object):
     def get_cmds(self):
         print("get_cmds")
 
-        if (self.conexao is not None):
+        if (self.connection is not None):
             try:
                 self.cursor.execute("SELECT texto , cmd FROM cmds")
 
                 results = self.cursor.fetchall()
 
                 for parts in results:
-                    self.dicionario_cmd.update(
+                    self.dic_cmd.update(
                         {parts[0]: parts[1]})  # colocados dentro da lista as mensagens e os comandos
-                return self.dicionario_cmd
+                return self.dic_cmd
             except:
                 print("erro get_cmds")
-                self.conexao_on()
+                self.connection_on()
                 return None
         else:
             print("sem conexão com o banco de dados ")
@@ -411,19 +412,19 @@ class banco_de_dados(object):
     def get_mensagem_cmd(self):
         print("get_cmds")
 
-        if (self.conexao is not None):
+        if (self.connection is not None):
             try:
                 self.cursor.execute("SELECT cmd , texto  FROM mensagem_cmd")
 
                 results = self.cursor.fetchall()
 
                 for parts in results:
-                    self.dicionario_mensagem_cmd.update(
+                    self.dic_message_cmd.update(
                         {parts[0]: parts[1]})  # colocados dentro da lista as mensagens e os comandos
-                return self.dicionario_mensagem_cmd
+                return self.dic_message_cmd
             except:
                 print("erro get_cmds")
-                self.conexao_on()
+                self.connection_on()
                 return None
         else:
             print("sem conexão com o banco de dados ")
@@ -436,7 +437,7 @@ class banco_de_dados(object):
             cod = self.Numero_aleatorio_quiz()
         print(cod)
 
-        if (self.conexao is not None):
+        if (self.connection is not None):
             try:
 
                 self.cursor.execute(
@@ -463,7 +464,7 @@ class banco_de_dados(object):
                 return dicionario_quest[0].copy()
             except:
                 print("erro get_quiz")
-                self.conexao_on()
+                self.connection_on()
                 return None
         else:
             print("sem conexão com o banco de dados ")
@@ -471,8 +472,8 @@ class banco_de_dados(object):
 
     def fechar_conexao(self):
         print("fechar_conexao")
-        if (self.conexao is not None):
+        if (self.connection is not None):
             # Finaliza a conexão
-            self.conexao.close()
+            self.connection.close()
         else:
             print("sem conexão com o banco de dados ")

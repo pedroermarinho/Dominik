@@ -1,19 +1,19 @@
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import time
-from Principal import Main
-from Palavras_Chave import Palavra_Chave
-from BD import banco_de_dados
-from Comandos import Comando
-from Arduino_CMD import arduino_cmd
+from app.controllers.chat_bot import Dominik
+from app.controllers.key_words import Palavra_Chave
+from app.models.functions_db import Database
+from app.controllers.commands import Comando
+from app.controllers.arduino_cmd import arduino_cmd
 from tokens.tokens import Tokens
 from threading import Thread
 
 arduino_comando = arduino_cmd()
 cmds = Comando(arduino_comando)
-main = Main(arduino_comando)
+main = Dominik(arduino_comando)
 Palavra_Chave = Palavra_Chave()
-base_de_dados = banco_de_dados()
+base_de_dados = Database()
 
 try:
     telegram = telepot.Bot(Tokens.chave_token_telegram)  # endereço de acesso do bot
@@ -30,7 +30,7 @@ def recebendo_mensagem(msg):  # função que ira receber a mensagem
     texto = msg['text']  # captura somente o texto enviado
 
     # funçao para retorna o tipo da mensagem , tipo do chat e o Id do usuario que necessario para enviar mensagem
-    Thread(target=base_de_dados.add_base_de_usuarios,
+    Thread(target=base_de_dados.add_base_de_users,
            args=(str(chat_id), str(str(msg['from']['first_name']) + ' ' + msg['from']['last_name']),)).start()
 
     if cmds.comando(str(texto)) in {"CMD_LUZ_QUARTO_1", "CMD_LUZ_QUARTO_2", "CMD_LUZ_QUARTO_3", "CMD_LUZ_BANHEIRO_1",
@@ -204,7 +204,7 @@ def Resposta(msg):
 
                 telegram.sendMessage(chat_id, str(cod) + ') ' + 'Parabéns {}, você acertou 👏🏼👏🏼👏🏼 '.format(
                     msg['from']['first_name'] + ' ' + msg['from']['last_name']) + "\n Sua pontuação é de " + str(
-                    float(base_de_dados.get_pontuacao(chat_id)) + 2) + " pontos")
+                    float(base_de_dados.get_point(chat_id)) + 2) + " pontos")
 
                 Thread(target=base_de_dados.add_pontucao_acetou, args=(chat_id, int(str(cod) + str(1)),)).start()
 
@@ -212,9 +212,9 @@ def Resposta(msg):
 
                 telegram.sendMessage(chat_id, str(cod) + ') ' + '😓 Poxa, não foi dessa vez {}!!!'.format(
                     msg['from']['first_name'] + ' ' + msg['from']['last_name']) + "\n Sua pontuação é de " + str(
-                    float(base_de_dados.get_pontuacao(chat_id)) - 1) + " pontos")
+                    float(base_de_dados.get_point(chat_id)) - 1) + " pontos")
 
-                Thread(target=base_de_dados.add_pontucao_errou, args=(chat_id, int(str(cod) + str(1)),)).start()
+                Thread(target=base_de_dados.add_negative_point, args=(chat_id, int(str(cod) + str(1)),)).start()
 
             # ------------------------------------------------------------------------------
 
@@ -225,7 +225,7 @@ def Resposta(msg):
 
                 telegram.sendMessage(chat_id, str(cod) + ') ' + 'Parabéns {}, você acertou 👏🏼👏🏼👏🏼 '.format(
                     msg['from']['first_name'] + ' ' + msg['from']['last_name']) + "\n Sua pontuação é de " + str(
-                    float(base_de_dados.get_pontuacao(chat_id)) + 2) + " pontos")
+                    float(base_de_dados.get_point(chat_id)) + 2) + " pontos")
 
                 Thread(target=base_de_dados.add_pontucao_acetou, args=(chat_id, int(str(cod) + str(2)),)).start()
 
@@ -233,9 +233,9 @@ def Resposta(msg):
 
                 telegram.sendMessage(chat_id, str(cod) + ') ' + '😓 Poxa, não foi dessa vez {}!!!'.format(
                     msg['from']['first_name'] + ' ' + msg['from']['last_name']) + "\n Sua pontuação é de " + str(
-                    float(base_de_dados.get_pontuacao(chat_id)) - 1) + " pontos")
+                    float(base_de_dados.get_point(chat_id)) - 1) + " pontos")
 
-                Thread(target=base_de_dados.add_pontucao_errou, args=(chat_id, int(str(cod) + str(2)),)).start()
+                Thread(target=base_de_dados.add_negative_point, args=(chat_id, int(str(cod) + str(2)),)).start()
 
             # ------------------------------------------------------------------------------
 
@@ -246,7 +246,7 @@ def Resposta(msg):
 
                 telegram.sendMessage(chat_id, str(cod) + ') ' + 'Parabéns {}, você acertou 👏🏼👏🏼👏🏼 '.format(
                     msg['from']['first_name'] + ' ' + msg['from']['last_name']) + "\n Sua pontuação é de " + str(
-                    float(base_de_dados.get_pontuacao(chat_id)) + 2) + " pontos")
+                    float(base_de_dados.get_point(chat_id)) + 2) + " pontos")
 
                 Thread(target=base_de_dados.add_pontucao_acetou, args=(chat_id, int(str(cod) + str(3)),)).start()
 
@@ -254,9 +254,9 @@ def Resposta(msg):
 
                 telegram.sendMessage(chat_id, str(cod) + ') ' + '😓 Poxa, não foi dessa vez {}!!!  '.format(
                     msg['from']['first_name'] + ' ' + msg['from']['last_name']) + "\n Sua pontuação é de " + str(
-                    float(base_de_dados.get_pontuacao(chat_id)) - 1) + " pontos")
+                    float(base_de_dados.get_point(chat_id)) - 1) + " pontos")
 
-                Thread(target=base_de_dados.add_pontucao_errou, args=(chat_id, int(str(cod) + str(3)),)).start()
+                Thread(target=base_de_dados.add_negative_point, args=(chat_id, int(str(cod) + str(3)),)).start()
 
             # ------------------------------------------------------------------------------
 
@@ -267,7 +267,7 @@ def Resposta(msg):
 
                 telegram.sendMessage(chat_id, str(cod) + ') ' + 'Parabéns {}, você acertou 👏🏼👏🏼👏🏼 '.format(
                     msg['from']['first_name'] + ' ' + msg['from']['last_name']) + "\n Sua pontuação é de " + str(
-                    float(base_de_dados.get_pontuacao(chat_id)) + 2) + " pontos")
+                    float(base_de_dados.get_point(chat_id)) + 2) + " pontos")
 
                 Thread(target=base_de_dados.add_pontucao_acetou, args=(chat_id, int(str(cod) + str(4)),)).start()
 
@@ -276,9 +276,9 @@ def Resposta(msg):
 
                 telegram.sendMessage(chat_id, str(cod) + ') ' + '😓 Poxa, não foi dessa vez {}!!! '.format(
                     msg['from']['first_name'] + ' ' + msg['from']['last_name']) + "\n Sua pontuação é de " + str(
-                    float(base_de_dados.get_pontuacao(chat_id)) - 1) + " pontos")
+                    float(base_de_dados.get_point(chat_id)) - 1) + " pontos")
 
-                Thread(target=base_de_dados.add_pontucao_errou, args=(chat_id, int(str(cod) + str(4)),)).start()
+                Thread(target=base_de_dados.add_negative_point, args=(chat_id, int(str(cod) + str(4)),)).start()
 
             # ------------------------------------------------------------------------------
 
@@ -289,7 +289,7 @@ def Resposta(msg):
 
                 telegram.sendMessage(chat_id, str(cod) + ') ' + 'Parabéns {}, você acertou 👏🏼👏🏼👏🏼 '.format(
                     msg['from']['first_name'] + ' ' + msg['from']['last_name']) + "\n Sua pontuação é de " + str(
-                    float(base_de_dados.get_pontuacao(chat_id)) + 2) + " pontos")
+                    float(base_de_dados.get_point(chat_id)) + 2) + " pontos")
 
                 Thread(target=base_de_dados.add_pontucao_acetou, args=(chat_id, int(str(cod) + str(5)),)).start()
 
@@ -297,9 +297,9 @@ def Resposta(msg):
 
                 telegram.sendMessage(chat_id, str(cod) + ') ' + '😓 Poxa, não foi dessa vez {}!!! '.format(
                     msg['from']['first_name'] + ' ' + msg['from']['last_name']) + "\n Sua pontuação é de " + str(
-                    float(base_de_dados.get_pontuacao(chat_id)) - 1) + " pontos")
+                    float(base_de_dados.get_point(chat_id)) - 1) + " pontos")
 
-                Thread(target=base_de_dados.add_pontucao_errou, args=(chat_id, int(str(cod) + str(5)),)).start()
+                Thread(target=base_de_dados.add_negative_point, args=(chat_id, int(str(cod) + str(5)),)).start()
 
             # ------------------------------------------------------------------------------
 
@@ -307,9 +307,9 @@ def Resposta(msg):
 
             telegram.sendMessage(chat_id, str(cod) + ') ' + '😓 Poxa, não foi dessa vez {}!!!'.format(
                 msg['from']['first_name'] + ' ' + msg['from']['last_name']) + "\n Sua pontuação é de " + str(
-                float(base_de_dados.get_pontuacao(chat_id)) - 1) + " pontos")
+                float(base_de_dados.get_point(chat_id)) - 1) + " pontos")
 
-            Thread(target=base_de_dados.add_pontucao_errou, args=(chat_id, int(str(cod) + str(0)),)).start()
+            Thread(target=base_de_dados.add_negative_point, args=(chat_id, int(str(cod) + str(0)),)).start()
 
 
 # ------------------------------------------------------------------------------
