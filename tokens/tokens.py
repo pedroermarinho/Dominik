@@ -1,4 +1,8 @@
 # -*- coding:utf-8  -*-
 class Tokens:
-    host = "dominik.mysql.uhserver.com"
-
+    host = ""
+    db = ""
+    user = ""
+    passwd = ""
+    database = ''
+    chave_token_telegram=''
