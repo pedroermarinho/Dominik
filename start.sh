@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 until
-sudo venv/bin/python3.7 Telegram.py ;
+sudo venv/bin/python3.7 telegram.py ;
  do
     echo "..."
     sleep 1

@@ -24,8 +24,11 @@ class Palavra_Chave:
         result = None  # resultado
 
         for chave in self.palavras_chaves_wikipedia:  # percorrer as palavras chaves
-            if texto.lower().startswith(chave.lower()):  # verifica se texto começa com alguma palavra chave
-                result = texto.lower().replace(chave.lower(), '')  # texto atual menos a chave utilizada
+            try:
+                if texto.lower().startswith(chave.lower()):  # verifica se texto começa com alguma palavra chave
+                    result = texto.lower().replace(chave.lower(), '')  # texto atual menos a chave utilizada
+            except:
+                return None
         if result is not None:  # verifica se result não é nulo
             try:
                 print('pesquisando')

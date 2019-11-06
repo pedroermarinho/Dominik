@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm, CSRFProtect
-from wtforms import StringField, PasswordField, BooleanField
+from wtforms import StringField, PasswordField, BooleanField, RadioField, SubmitField
 from wtforms.validators import DataRequired , Email
 
 # csrf = CSRFProtect()
@@ -18,3 +18,6 @@ class RegisterForm(FlaskForm):
     password = PasswordField("password", validators=[DataRequired('não pode ficar vazio')])
 
 
+class In_formallyForm(FlaskForm):
+    type_dic_radio = RadioField('In_formally', choices=[('informally', 'Informally'), ('formally', 'Formally')])
+    submit = SubmitField("Send")

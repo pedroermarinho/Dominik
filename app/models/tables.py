@@ -1,6 +1,7 @@
 from app import db
 
 
+
 class User(db.Model):
     __tablename__ = "users"
 
@@ -62,3 +63,4 @@ class Follow(db.Model):
 
     # user = db.relationship('User', foreign_key=user_id)
     # follower = db.relationship('User', foreign_key=follower_id)
+

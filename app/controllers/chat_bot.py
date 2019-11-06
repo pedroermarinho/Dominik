@@ -50,19 +50,17 @@ class Dominik:  # class 3
     def train(self, url):  # finção para treinar o chatteot com novos aquivos
         # try:
 
-        http = urllib3.PoolManager()
-        response = http.request('GET', str(url))
-        data = response.data.decode('utf-8')
-        yml_data = yaml.load(data)
-
-        print(yml_data)
-        self.trainerDominikBot.train(yml_data)  # trrinar o bot com as palavras
+        self.trainerDominikBot.train( "chatterbot.corpus.portuguese")
+        # http = urllib3.PoolManager()
+        # response = http.request('GET', str(url))
+        # data = response.data.decode('utf-8')
+        # yml_data = yaml.load(data)
+        #
+        # print(yml_data)
+        # self.trainerDominikBot.train(yml_data)  # trrinar o bot com as palavras
 
         # except:
         #     print("Erro função-> treino")
-
-
-
 
     def mensagem_bot_pergunta(self, text=None):  # função que ira tratar as mensagens
         if text is None:  # caso a função nao recebar nenhum parametro ele ira receber o parametro do terminal
@@ -76,8 +74,7 @@ class Dominik:  # class 3
         result = self.Comando.executar_cmd(
             self.Comando.comando(cmd))  # verifica se é um comando e se for retonara o resultado
         if result is None:  # verifica se é algum comado
-            result = self.palavra_chaves.pesquisa_na_wikipedia(
-                cmd)  # verifica se é uma pesquisa , se for <retornara o resultado da pesquisa
+            result = self.palavra_chaves.pesquisa_na_wikipedia(cmd)  # verifica se é uma pesquisa , se for <retornara o resultado da pesquisa
 
             if result is None:  # verifica se é algum comado
                 result = self.palavra_chaves.pesquisa_definicao(
@@ -141,6 +138,6 @@ if __name__ == "__main__":
     # print(yaml.load_all("https://pedroermarinho.github.io/Dominik-dic/src/yml/formally/PT-BR/conversations.yml"))
 
     main = Dominik()
-    main.train("https://pedroermarinho.github.io/Dominik-dic/src/yml/formally/PT-BR/conversations.yml")
-    # while True:
-    #     print(main.mensagem_bot_resposta(main.mensagem_bot_pergunta()))
+    # main.train("https://pedroermarinho.github.io/Dominik-dic/src/yml/formally/PT-BR/conversations.yml")
+    while True:
+        print(main.mensagem_bot_resposta(main.mensagem_bot_pergunta()))

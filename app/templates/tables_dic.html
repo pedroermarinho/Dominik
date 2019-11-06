@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block item_tables %}active{% endblock %}
+{% block content %}
+
+<!--{% block title %}{{super()}} - Tables {% endblock %}-->
+
+<div id="wrapper">
+
+  <div id="content-wrapper">
+
+    <div class="container-fluid">
+
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Tables</li>
+      </ol>
+
+      <!-- DataTables Example -->
+      <div class="card mb-3">
+        <div class="card-header">
+          <i class="fas fa-table"></i>
+          Dicionários
+          <form action="" method="post">
+            {{ form_dic_type.csrf_token }}
+            {{ form_dic_type.type_dic_radio(class="radio") }}
+            {{ form_dic_type.submit(class="btn btn-primary ") }}
+          </form>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Language</th>
+                <th>SubCategory</th>
+                <th>Download</th>
+                <th>Update&nbsp;&nbsp;&nbsp;</th>
+                <th>Delete&nbsp;&nbsp;&nbsp;&nbsp;</th>
+              </tr>
+              </thead>
+              <tfoot>
+              <tr>
+                <th>Name</th>
+                <th>Language</th>
+                <th>SubCategory</th>
+                <th>Download</th>
+                <th>Update&nbsp;&nbsp;&nbsp;</th>
+                <th>Delete&nbsp;&nbsp;&nbsp;&nbsp;</th>
+              </tr>
+              </tfoot>
+              <tbody>
+              {% for link in link_dada %}
+              <tr>
+                <td><a href="{{link.url}}" target="_blank">{{link.nome}}</a></td>
+                <td>{{link.language}}</td>
+                <td>{{link.subcategory}}</td>
+                <td><button class="btn btn-primary btn-block"><i class="fas fa-download"></i></button></td>
+                <td><button class="btn btn-primary btn-block"><i class="fas fa-retweet"></i></button></td>
+                <td><button class="btn btn-primary btn-block"><i class="fas fa-trash"></i></button></td>
+              </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+      </div>
+
+      <p class="small text-center text-muted my-5">
+        <em>More table examples coming soon...</em>
+      </p>
+
+    </div>
+    <!-- /.container-fluid -->
+
+    <!-- Sticky Footer -->
+    <footer class="sticky-footer">
+      <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+          <span>Copyright © Your Website 2019</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+  <!-- /.content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+{% endblock %}

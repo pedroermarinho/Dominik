@@ -3,13 +3,17 @@ from flask_login import login_user, logout_user, login_required, current_user
 
 from app import app, db, login_manager
 
-from app.models.forms import LoginForm, RegisterForm
-
+from app.models.forms import LoginForm, RegisterForm, In_formallyForm
 
 from app.models.tables import User
 
 from app.controllers.chat_bot import Dominik
+
+import urllib3
+import json
+
 bot_dominik = Dominik()
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -50,8 +54,9 @@ def charts():
         return render_template('charts.html')
 
 
+@app.errorhandler(404)
 @app.route('/404')
-def er404():
+def not_found(e=None):
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -81,7 +86,7 @@ def login():
     return render_template('login.html', login_form=login_form)
 
 
-@app.route('/register',methods=["POST", "GET"])
+@app.route('/register', methods=["POST", "GET"])
 def register():
     register_form = RegisterForm()
     if register_form.validate_on_submit():
@@ -92,20 +97,36 @@ def register():
         elif email:
             flash("Email inválido")
         else:
-            i = User(str(register_form.username.data), str(register_form.password.data), str(register_form.name.data), str(register_form.email.data))
+            i = User(str(register_form.username.data), str(register_form.password.data), str(register_form.name.data),
+                     str(register_form.email.data))
             db.session.add(i)
             db.session.commit()
             return redirect(url_for('login'))
-    
+
     return render_template('register.html', register_form=register_form)
 
 
-@app.route('/tables')
-def tables():
+@app.route('/tables_dic', methods=['GET', 'POST'])
+def tables_dic():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
-        return render_template('tables.html')
+        form_dic_type = In_formallyForm()
+        http = urllib3.PoolManager()
+        response = http.request('GET', "https://pedroermarinho.github.io/Dominik-dic/src/yml/formally.json")
+        if form_dic_type.validate_on_submit():
+            value = form_dic_type.type_dic_radio.data
+            if value == 'formally':
+                response = http.request('GET', "https://pedroermarinho.github.io/Dominik-dic/src/yml/formally.json")
+                flash('Formally')
+            elif value == 'informally':
+                response = http.request('GET', "https://pedroermarinho.github.io/Dominik-dic/src/yml/informally.json")
+                flash('Informally')
+        else:
+            flash(str(form_dic_type.errors))
+
+        link_dada = json.loads(response.data.decode('utf-8'))
+        return render_template('tables_dic.html', link_dada=link_dada, form_dic_type=form_dic_type)
 
 
 @app.route('/base')
@@ -141,16 +162,13 @@ def test(info):
         return render_template('test.html', info="ok")
 
 
-#define app routes
+# define app routes
 @app.route("/chatbot")
 def chatbot():
     return render_template("chatbot.html")
+
 
 @app.route("/get")
 def get_bot_response():
     userText = request.args.get('msg')
     return str(bot_dominik.mensagem_bot_resposta(bot_dominik.mensagem_bot_pergunta(userText)))
-
-
-
-

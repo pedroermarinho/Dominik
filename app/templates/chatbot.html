@@ -31,23 +31,20 @@
                         </div>
                         <script>
                                 function getResponse() {
-                                var vdata = new Date();
-                                var hora = vdata.getHours + ':' + vdata.getMinutes + ':' + vdata.getSeconds;
-                                $("#chatbox").animate({scrollTop: $('#chatbox').prop("scrollHeight")}, 500)    ;
+
                                     let userText = $("#textInput").val();
-                                    //let userHtml = '<p class="userText"><span>' + userText + '</span></p>';
-                                    let userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer-chatbot">' + userText + ' <span class="msg_time-chatbot">'+hora+'</span> </div><div class="img_cont_msg-chatbot"><img src="{{ url_for("static", filename="img/user.png")}}" class="rounded-circle user_img_msg-chatbot"></div></div>';
+                                    let userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer-chatbot">' + userText + ' </div><div class="img_cont_msg-chatbot"><img src="{{ url_for("static", filename="img/user.png")}}" class="rounded-circle user_img_msg-chatbot"></div></div>';
 
                                     $("#textInput").val("");
                                     $("#chatbox").append(userHtml);
                                     document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
                                     $.get("/get", { msg: userText }).done(function(data) {
-                                    //var botHtml = '<p class="botText"><span>' + data + '</span></p>';
-                                    var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg-chatbot"><img src="{{ url_for("static", filename="img/adm.png")}}" class="rounded-circle user_img_msg-chatbot"></div><div class="msg_cotainer_send-chatbot">' + data + ' <span class="msg_time_send-chatbot">'+hora+'</span> </div></div>';;
+                                    var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg-chatbot"><img src="{{ url_for("static", filename="img/adm.png")}}" class="rounded-circle user_img_msg-chatbot"></div><div class="msg_cotainer_send-chatbot">' + data + '</div></div>';;
                                     $("#chatbox").append(botHtml);
                                     document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
                                     
                                     });
+                                    $("#chatbox").animate({scrollTop: $('#chatbox').prop("scrollHeight")}, 500);
                                 }
                                 $("#textInput").keypress(function(e) {
                                 //if enter key is pressed

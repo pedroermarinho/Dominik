@@ -21,10 +21,13 @@
   <link href="{{ url_for('static', filename='css/sb-admin.css')}}" rel="stylesheet">
 
 
- <link href="{{ url_for('static', filename='css/chatbot.css')}}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/chatbot.css')}}" rel="stylesheet">
   <link href="{{ url_for('static', filename='vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.css')}}" rel="stylesheet" type="text/css" >
-    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
+  <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.css')}}" rel="stylesheet" type="text/css" >
+   
+  
+  <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
+
 
 
 </head>
@@ -56,7 +59,7 @@
       <li class="nav-item dropdown no-arrow mx-1">
         <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-bell fa-fw"></i>
-          <span class="badge badge-danger">9+</span>
+          <!-- <span class="badge badge-danger">9+</span> -->
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
           <a class="dropdown-item" href="#">Açao</a>
@@ -68,10 +71,10 @@
       <li class="nav-item dropdown no-arrow mx-1">
         <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-envelope fa-fw"></i>
-          <span class="badge badge-danger">7</span>
+          <!-- <span class="badge badge-danger">7</span> -->
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
-          <a class="dropdown-item" href="#">Açao</a>
+          <a class="dropdown-item" href="{{url_for('chatbot')}}">Chat Bot</a>
           <a class="dropdown-item" href="#">Outra ação</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Algo mais aqui</a>
@@ -83,12 +86,12 @@
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
           {% if current_user.is_authenticated %}
-              <p class="dropdown-item" >Hi {{ current_user.name }}!</p>
+              <p class="dropdown-item" >Olá {{ current_user.name }}!</p>
           {% endif %}
           <a class="dropdown-item" href="{{url_for('settings')}}">Configurações</a>
           <a class="dropdown-item" href="#">Registro de atividade</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href={{url_for('logout')}}>Sair</a>
+          <a class="dropdown-item" href="{{url_for('logout')}}">Sair</a>
         </div>
       </li>
     </ul>
@@ -109,6 +112,11 @@
         <a class="nav-link" href="chatbot">
           <i class="fas fa-comments"></i>
           <span>Chat Bot</span></a>
+      </li>
+      <li class="nav-item {% block item_tables %} {% endblock %}" >
+        <a class="nav-link" href="tables_dic">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Dicionários</span></a>
       </li>
       <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -131,11 +139,7 @@
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Gráficos</span></a>
       </li>
-      <li class="nav-item {% block item_tables %} {% endblock %}" >
-        <a class="nav-link" href="tables">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Tabelas</span></a>
-      </li>
+
     </ul>
 
     <div id="content-wrapper">
@@ -199,9 +203,10 @@
     </div>
   </div>
 
+  <!-- <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script> -->
   <!-- Bootstrap core JavaScript-->
-  <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
-  <script src="{{ url_for('static', filename='vendor/jquery/jquery.js')}}"></script>
+  <!-- <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script> -->
+  <!-- <script src="{{ url_for('static', filename='vendor/jquery/jquery.js')}}"></script> -->
   <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
   <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.js')}}"></script>
 
