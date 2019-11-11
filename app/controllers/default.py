@@ -125,6 +125,16 @@ def tables_dic():
         else:
             flash(str(form_dic_type.errors))
 
+        print(request.method)
+        if request.method == 'POST':
+            print("request.form=>>>>>" + str(request.form))
+            if "Download" in request.form:
+                print(request.form.get('Download'))
+            elif "Update" in request.form:
+                print(request.form.get('Update'))
+            elif "Delete" in request.form:
+                print(request.form.get('Delete'))
+
         link_dada = json.loads(response.data.decode('utf-8'))
         return render_template('tables_dic.html', link_dada=link_dada, form_dic_type=form_dic_type)
 
@@ -170,5 +180,7 @@ def chatbot():
 
 @app.route("/get")
 def get_bot_response():
+    print("test")
+    print(request.args.get('Download'))
     userText = request.args.get('msg')
     return str(bot_dominik.mensagem_bot_resposta(bot_dominik.mensagem_bot_pergunta(userText)))

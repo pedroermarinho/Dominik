@@ -38,6 +38,7 @@
                                     $("#textInput").val("");
                                     $("#chatbox").append(userHtml);
                                     document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+
                                     $.get("/get", { msg: userText }).done(function(data) {
                                     var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg-chatbot"><img src="{{ url_for("static", filename="img/adm.png")}}" class="rounded-circle user_img_msg-chatbot"></div><div class="msg_cotainer_send-chatbot">' + data + '</div></div>';;
                                     $("#chatbox").append(botHtml);

@@ -53,17 +53,22 @@
               </tr>
               </tfoot>
               <tbody>
-              {% for link in link_dada %}
-              {% set estado = "disabled" %}
-              <tr>
-                <td><a href="{{link.url}}" target="_blank">{{link.nome}}</a></td>
-                <td>{{link.language}}</td>
-                <td>{{link.subcategory}}</td>
-                <td><button class="btn btn-primary btn-block" {{estado}}><i class="fas fa-download"></i></button></td>
-                <td><button class="btn btn-primary btn-block" {{estado}}><i class="fas fa-retweet"></i></button></td>
-                <td><button class="btn btn-primary btn-block" {{estado}}><i class="fas fa-trash"></i></button></td>
-              </tr>
+
+                  {% for link in link_dada %}
+    <!--              disabled-->
+                  {% set estado = "" %}
+                  <tr>
+                    <td><a href="{{link.url}}" target="_blank">{{link.nome}}</a></td>
+                    <td>{{link.language}}</td>
+                    <td>{{link.subcategory}}</td>
+                      <form method="post" action="/">
+                    <td><button id="Download" class="btn btn-primary btn-block" type="button" name="Download" value="{{link}}" {{estado}}><i class="fas fa-download"></i></button></td>
+                    <td><button id="Update" class="btn btn-primary btn-block" type="button" name="Update" value="{{link}}" {{estado}}><i class="fas fa-retweet"></i></button></td>
+                    <td><button id="Delete" class="btn btn-primary btn-block" type="button" name="Delete" value="{{link}}" {{estado}}><i class="fas fa-trash"></i></button></td>
+                     </form>
+                  </tr>
               {% endfor %}
+
               </tbody>
             </table>
           </div>
@@ -91,5 +96,16 @@
   <!-- /.content-wrapper -->
 
 </div>
+<script>
+    function getResponse() {
+    $.get("/get", { msg: userText }).done(function(data) {
+
+    });
+    }
+    $("#Download").click(function() {
+        getResponse();
+    });
+</script>
+
 <!-- /#wrapper -->
 {% endblock %}
