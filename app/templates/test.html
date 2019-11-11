@@ -1,11 +1,44 @@
-{% extends 'base.html' %}
-{% block content %}
+  <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
+<div class="container-fluid h-100">
+    <div class="row justify-content-center h-100">
+        <div class="col-md-8 col-xl-6 chat-chatbot">
+            <div class="card-chatbot card" >
+                <div class="card-header-chatbot  card-header msg_head-chatbot">
+                    <div class="d-flex bd-highlight">
+                        <div class="user_info-chatbot">
+                            <span>Dominik</span>
+                        </div>
 
-<!--{% block title %}{{super()}} - Test {% endblock %}-->
+                    </div>
 
-    {% if user %}
-        <p>ola {{user}}</p>
-    {% else %}
-        <p>ola usuario</p>
-    {% endif %}
-{% endblock %}
+                </div>
+                <div class="card-body msg_card_body-chatbot" id="chatbox">
+
+                </div>
+                
+                <div class="card-footer-chatbot card-footer">
+                    <div class="input-group" id="userInput">
+                        <input id="textInput" class="form-control type_msg-chatbot" type="text" name="test" placeholder="Type your message...">
+                        <div class="input-group-append">
+                            <button id="buttonInput" class="input-group-text send_btn-chatbot" type="submit" value="input"><i class="fas fa-location-arrow"></i></button>
+                        </div>
+                        <script>
+                                function getTest() {
+                                    let userText = "test1";
+                                    $.get("/get", { test: userText });
+                                }
+                                $("#buttonInput").click(function() {
+                                    getTest();
+                                });
+                        </script>
+                            
+                    </div>
+                
+                
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

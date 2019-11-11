@@ -8,6 +8,7 @@ from app.models.forms import LoginForm, RegisterForm, In_formallyForm
 from app.models.tables import User
 
 from app.controllers.chat_bot import Dominik
+from app.controllers.file import download_yml
 
 import urllib3
 import json
@@ -160,27 +161,48 @@ def settings():
     pass
 
 
-@app.route('/test/<info>')
-@app.route('/test/', defaults={'info': None})
-def test(info):
-    i = User("pedro123", "1234", "pedro", "pedro.marinho2348")
-    db.session.add(i)
-    db.session.commit()
-    if not current_user.is_authenticated:
-        return redirect(url_for('login'))
-    else:
-        return render_template('test.html', info="ok")
-
-
 # define app routes
 @app.route("/chatbot")
 def chatbot():
     return render_template("chatbot.html")
 
 
+@app.route('/test')
+def test():
+    return render_template('test.html')
+
+
 @app.route("/get")
 def get_bot_response():
-    print("test")
-    print(request.args.get('Download'))
+    download_dic = request.args.get('download_dic')
+    update_dic = request.args.get('update_dic')
+    delete_dic = request.args.get('delete_dic')
     userText = request.args.get('msg')
-    return str(bot_dominik.mensagem_bot_resposta(bot_dominik.mensagem_bot_pergunta(userText)))
+    test = request.args.get('test')
+    print(test)
+    if userText is not None:
+        print(userText)
+        return str(bot_dominik.mensagem_bot_resposta(bot_dominik.mensagem_bot_pergunta(userText)))
+    elif download_dic is not None:
+        print("download_dic")
+        download_dic = download_dic.replace("\'", "\"")
+        download_dic = json.loads(download_dic)
+        download_yml(download_dic["url"], download_dic["subcategory"])
+        flash("Download do Arquivo "+download_dic["subcategory"]+" Concluído com Sucesso")
+        return ""
+    elif update_dic is not None:
+        print("update_dic")
+        update_dic = update_dic.replace("\'", "\"")
+        update_dic = json.loads(update_dic)
+        print(update_dic)
+        return ""
+    elif delete_dic is not None:
+        print("delete_dic")
+        delete_dic = delete_dic.replace("\'", "\"")
+        delete_dic = json.loads(delete_dic)
+        print(delete_dic)
+        # data = json.load(delete_dic)
+        # print(data)
+        return ""
+    else:
+        return None

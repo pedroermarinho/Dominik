@@ -6,7 +6,6 @@ import yaml
 
 dir_default = os.environ['HOME'] + "/.Dominik"
 dir_dic_yml = dir_default + "/dictionary/yml"
-print(dir_default)
 
 try:
     os.makedirs(dir_dic_yml)
@@ -41,10 +40,7 @@ def download_yml(url, name):
                 done = int(50 * dl / total_length)
                 sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50 - done)))
                 sys.stdout.flush()
-    pass
 
-
-download_yml("https://pedroermarinho.github.io/Dominik-dic/src/yml/formally/PT-BR/ai.yml","ia")
 
 # link = "https://pedroermarinho.github.io/Dominik-dic/src/yml/formally/PT-BR/ai.yml"
 # file_name = directory_default+"/dictionary/yml/Formally/download.data"

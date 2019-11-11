@@ -30,6 +30,7 @@
           </form>
         </div>
         <div class="card-body">
+
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
@@ -61,11 +62,49 @@
                     <td><a href="{{link.url}}" target="_blank">{{link.nome}}</a></td>
                     <td>{{link.language}}</td>
                     <td>{{link.subcategory}}</td>
-                      <form method="post" action="/">
-                    <td><button id="Download" class="btn btn-primary btn-block" type="button" name="Download" value="{{link}}" {{estado}}><i class="fas fa-download"></i></button></td>
-                    <td><button id="Update" class="btn btn-primary btn-block" type="button" name="Update" value="{{link}}" {{estado}}><i class="fas fa-retweet"></i></button></td>
-                    <td><button id="Delete" class="btn btn-primary btn-block" type="button" name="Delete" value="{{link}}" {{estado}}><i class="fas fa-trash"></i></button></td>
-                     </form>
+
+                    <td>
+                      <button id="btnDow{{link.subcategory}}" class="btn btn-primary btn-block" type="submit" name="download_dic" value="{{link}}" {{estado}}>
+                        <i class="fas fa-download"></i>
+                      </button>
+                      <script>
+                        function getDownload{{link.subcategory}}() {
+                           let downloadData = $("#btnDow{{link.subcategory}}").val();
+                            $.get("/get", { download_dic: downloadData });
+                         }
+                         $("#btnDow{{link.subcategory}}").click(function() {
+                             getDownload{{link.subcategory}}();
+                          });
+                      </script>
+                    </td>
+                    <td>
+                      <button id="btnUp{{link.subcategory}}" class="btn btn-primary btn-block" type="submit" name="update_dic" value="{{link}}" {{estado}}>
+                        <i class="fas fa-retweet"></i>
+                      </button>
+                      <script>
+                        function getUpdate{{link.subcategory}}() {
+                           let updateData = $("#btnUp{{link.subcategory}}").val();
+                            $.get("/get", { update_dic: updateData });
+                         }
+                         $("#btnUp{{link.subcategory}}").click(function() {
+                             getUpdate{{link.subcategory}}();
+                          });
+                      </script>
+                    </td>
+                    <td>
+                      <button id="btnDlt{{link.subcategory}}" class=" btn btn-primary btn-block" type="submit" name="delete_dic" value="{{link}}" {{estado}}>
+                        <i class="fas fa-trash"></i>
+                      </button>
+                      <script>
+                        function getDelete{{link.subcategory}}() {
+                           let deleteData = $("#btnDlt{{link.subcategory}}").val();
+                            $.get("/get", { delete_dic: deleteData });
+                         }
+                         $("#btnDlt{{link.subcategory}}").click(function() {
+                             getDelete{{link.subcategory}}();
+                          });
+                      </script>
+                    </td>
                   </tr>
               {% endfor %}
 
@@ -95,17 +134,8 @@
   </div>
   <!-- /.content-wrapper -->
 
-</div>
-<script>
-    function getResponse() {
-    $.get("/get", { msg: userText }).done(function(data) {
 
-    });
-    }
-    $("#Download").click(function() {
-        getResponse();
-    });
-</script>
+</div>
 
 <!-- /#wrapper -->
 {% endblock %}
