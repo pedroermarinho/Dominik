@@ -8,7 +8,8 @@ from app.models.forms import LoginForm, RegisterForm, In_formallyForm
 from app.models.tables import User
 
 from app.controllers.chat_bot import Dominik
-from app.controllers.file import download_yml
+from app.controllers.filer import download_yml, delete_yml
+from app.controllers import filer
 
 import urllib3
 import json
@@ -137,7 +138,7 @@ def tables_dic():
                 print(request.form.get('Delete'))
 
         link_dada = json.loads(response.data.decode('utf-8'))
-        return render_template('tables_dic.html', link_dada=link_dada, form_dic_type=form_dic_type)
+        return render_template('tables_dic.html', link_dada=link_dada, form_dic_type=form_dic_type,filer = filer)
 
 
 @app.route('/base')
@@ -188,21 +189,21 @@ def get_bot_response():
         download_dic = download_dic.replace("\'", "\"")
         download_dic = json.loads(download_dic)
         download_yml(download_dic["url"], download_dic["subcategory"])
-        flash("Download do Arquivo "+download_dic["subcategory"]+" Concluído com Sucesso")
+        flash("Download do arquivo "+download_dic["subcategory"]+" concluído com sucesso")
         return ""
     elif update_dic is not None:
         print("update_dic")
         update_dic = update_dic.replace("\'", "\"")
         update_dic = json.loads(update_dic)
-        print(update_dic)
+        download_yml(download_dic["url"], download_dic["subcategory"])
+        flash("Atualização do arquivo "+download_dic["subcategory"]+" concluído com sucesso")
         return ""
     elif delete_dic is not None:
         print("delete_dic")
         delete_dic = delete_dic.replace("\'", "\"")
         delete_dic = json.loads(delete_dic)
-        print(delete_dic)
-        # data = json.load(delete_dic)
-        # print(data)
+        delete_yml(delete_dic["url"], delete_dic["subcategory"])
+        flash("Arquivo "+delete_dic["subcategory"]+" deletado com sucesso")
         return ""
     else:
         return None
