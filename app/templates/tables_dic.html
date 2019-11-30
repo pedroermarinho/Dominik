@@ -57,14 +57,35 @@
 
                   {% for link in link_dada %}
     <!--              disabled-->
-                  {% set estado = "" %}
+                  {% set state = "" %}
+                  {% set file_exists = filer.verify_file_yml(link) %}
+                  {% set file_update = filer.verify_update_file_yml(link) %}
+
+                  {% if file_exists %}
+                    {% set state_download = "disabled" %}
+                  {% else %}
+                    {%  set state_download = "" %}
+                  {% endif %}
+
+                  {% if file_update %}
+                    {% set state_update = "" %}
+                  {% else %}
+                    {%  set state_update = "disabled" %}
+                  {% endif %}
+
+                  {% if file_exists %}
+                    {% set state_delete = "" %}
+                  {% else %}
+                    {%  set state_delete = "disabled" %}
+                  {% endif %}
+
                   <tr>
                     <td><a href="{{link.url}}" target="_blank">{{link.nome}}</a></td>
                     <td>{{link.language}}</td>
                     <td>{{link.subcategory}}</td>
 
                     <td>
-                      <button id="btnDow{{link.subcategory}}" class="btn btn-primary btn-block" type="submit" name="download_dic" value="{{link}}" {{estado}}>
+                      <button id="btnDow{{link.subcategory}}" class="btn btn-primary btn-block" type="submit" name="download_dic" value="{{link}}" {{state_download}}>
                         <i class="fas fa-download"></i>
                       </button>
                       <script>
@@ -74,11 +95,12 @@
                          }
                          $("#btnDow{{link.subcategory}}").click(function() {
                              getDownload{{link.subcategory}}();
+                             window.location.reload();
                           });
                       </script>
                     </td>
                     <td>
-                      <button id="btnUp{{link.subcategory}}" class="btn btn-primary btn-block" type="submit" name="update_dic" value="{{link}}" {{estado}}>
+                      <button id="btnUp{{link.subcategory}}" class="btn btn-primary btn-block" type="submit" name="update_dic" value="{{link}}" {{state_update}}>
                         <i class="fas fa-retweet"></i>
                       </button>
                       <script>
@@ -88,11 +110,12 @@
                          }
                          $("#btnUp{{link.subcategory}}").click(function() {
                              getUpdate{{link.subcategory}}();
+                             window.location.reload();
                           });
                       </script>
                     </td>
                     <td>
-                      <button id="btnDlt{{link.subcategory}}" class=" btn btn-primary btn-block" type="submit" name="delete_dic" value="{{link}}" {{estado}}>
+                      <button id="btnDlt{{link.subcategory}}" class=" btn btn-primary btn-block" type="submit" name="delete_dic" value="{{link}}" {{state_delete}}>
                         <i class="fas fa-trash"></i>
                       </button>
                       <script>
@@ -102,6 +125,7 @@
                          }
                          $("#btnDlt{{link.subcategory}}").click(function() {
                              getDelete{{link.subcategory}}();
+                             window.location.reload();
                           });
                       </script>
                     </td>

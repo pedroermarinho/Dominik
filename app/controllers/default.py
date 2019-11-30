@@ -125,17 +125,18 @@ def tables_dic():
                 response = http.request('GET', "https://pedroermarinho.github.io/Dominik-dic/src/yml/informally.json")
                 flash('Informally')
         else:
-            flash(str(form_dic_type.errors))
+            pass
+            # flash(str(form_dic_type.errors))
 
-        print(request.method)
-        if request.method == 'POST':
-            print("request.form=>>>>>" + str(request.form))
-            if "Download" in request.form:
-                print(request.form.get('Download'))
-            elif "Update" in request.form:
-                print(request.form.get('Update'))
-            elif "Delete" in request.form:
-                print(request.form.get('Delete'))
+        # print(request.method)
+        # if request.method == 'POST':
+        #     # print("request.form=>>>>>" + str(request.form))
+        #     if "Download" in request.form:
+        #         print(request.form.get('Download'))
+        #     elif "Update" in request.form:
+        #         print(request.form.get('Update'))
+        #     elif "Delete" in request.form:
+        #         print(request.form.get('Delete'))
 
         link_dada = json.loads(response.data.decode('utf-8'))
         return render_template('tables_dic.html', link_dada=link_dada, form_dic_type=form_dic_type,filer = filer)
@@ -182,24 +183,24 @@ def get_bot_response():
     test = request.args.get('test')
     print(test)
     if userText is not None:
-        print(userText)
+        # print(userText)
         return str(bot_dominik.mensagem_bot_resposta(bot_dominik.mensagem_bot_pergunta(userText)))
     elif download_dic is not None:
-        print("download_dic")
+        # print("download_dic")
         download_dic = download_dic.replace("\'", "\"")
         download_dic = json.loads(download_dic)
         download_yml(download_dic["url"], download_dic["subcategory"])
         flash("Download do arquivo "+download_dic["subcategory"]+" concluído com sucesso")
         return ""
     elif update_dic is not None:
-        print("update_dic")
+        # print("update_dic")
         update_dic = update_dic.replace("\'", "\"")
         update_dic = json.loads(update_dic)
         download_yml(download_dic["url"], download_dic["subcategory"])
         flash("Atualização do arquivo "+download_dic["subcategory"]+" concluído com sucesso")
         return ""
     elif delete_dic is not None:
-        print("delete_dic")
+        # print("delete_dic")
         delete_dic = delete_dic.replace("\'", "\"")
         delete_dic = json.loads(delete_dic)
         delete_yml(delete_dic["url"], delete_dic["subcategory"])
