@@ -17,3 +17,4 @@ flask-migrate
 flask-script
 flask-wtf
 chatterbot_corpus
+psutil

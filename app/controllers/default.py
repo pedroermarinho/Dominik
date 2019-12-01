@@ -14,6 +14,8 @@ from app.controllers import filer
 import urllib3
 import json
 
+import psutil
+
 bot_dominik = Dominik()
 
 
@@ -29,7 +31,7 @@ def home():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
-        return render_template('index.html')
+        return render_template('index.html',psutil=psutil)
 
 
 @app.route('/about')
@@ -173,6 +175,22 @@ def chatbot():
 def test():
     return render_template('test.html')
 
+@app.route("/cpu")
+def get_cpu():
+    return str(psutil.cpu_percent())
+
+@app.route("/ram")
+def get_ram():
+    return str(dict(psutil.virtual_memory()._asdict())["percent"])
+
+@app.route("/swap")
+def get_swap():
+    return str(dict(psutil.swap_memory()._asdict())["percent"])
+
+@app.route("/temperatures")
+def get_temperaturesp():
+    return str(psutil.sensors_temperatures()["acpitz"][0].current)
+   
 
 @app.route("/get")
 def get_bot_response():
