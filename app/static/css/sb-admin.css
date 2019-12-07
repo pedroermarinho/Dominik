@@ -8,7 +8,22 @@
  * Bootstrap v4.3.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors
  * Copyright 2011-2019 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * Licensed ucolcontentnder MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+
+
+
+
+ /*
+ my
+ */
+.div_black{
+  background-color:#111111;
+  /* padding: 30px; */
+}
+
+ /* 
+ fim my
  */
 :root {
   --blue: #007bff;
@@ -10889,12 +10904,13 @@ footer.sticky-footer {
   bottom: 0;
   width: calc(100% - 90px);
   height: 80px;
-  background-color: #e9ecef;
+  background-color: #272A2C;
 }
 
 footer.sticky-footer .copyright {
   line-height: 1;
   font-size: 0.8rem;
+  color: white;
 }
 
 @media (min-width: 768px) {

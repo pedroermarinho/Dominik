@@ -1,8 +1,26 @@
 {% extends 'base.html' %}
+{% block title %}{{super()}} - Home {% endblock %}
 {% block content %}
-<!--{% block title %}{{super()}} - Home {% endblock %}-->
-  <div class="jumbo">
-    <h2>Welcome to the Flask app<h2>
-    <h3>This is the home page for the Flask app<h3>
-  </div>
+ 
+<div id="wrapper">
+
+    <div id="content-wrapper">
+        <div class="container-fluid">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="#">Dashboard</a>
+              </li>
+              <li class="breadcrumb-item active">Home</li>
+            </ol>
+        </div>
+
+
+    </div>
+    <!-- /.content-wrapper -->
+  
+</div>
+  <!-- /#wrapper -->
+
 {% endblock %}

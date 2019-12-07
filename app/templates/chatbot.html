@@ -1,6 +1,20 @@
 {% extends 'base.html' %}
 {% block item_chatbot %}active{% endblock %}
+{% block title %}{{super()}} - ChatBot {% endblock %}
 {% block content %}
+
+<div id="wrapper">
+
+    <div id="content-wrapper">
+        <div class="container-fluid">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                <a href="#">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">ChatBot</li>
+            </ol>  
 
 <div class="container-fluid h-100">
     <div class="row justify-content-center h-100">
@@ -70,6 +84,13 @@
         </div>
     </div>
     
+</div>
+
+</div>
+    
+</div>
+<!-- /.content-wrapper -->
+
 </div>
 
 {%  endblock %}

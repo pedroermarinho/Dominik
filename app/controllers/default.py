@@ -162,14 +162,35 @@ def logout():
 @app.route("/settings")
 @login_required
 def settings():
-    pass
+    return render_template("settings.html")
 
+@app.route("/hardware")
+def hardware():
+    return render_template("hardware.html")
 
-# define app routes
+@app.route("/train")
+def train():
+    return render_template("train.html")
+
 @app.route("/chatbot")
 def chatbot():
     return render_template("chatbot.html")
 
+@app.route("/database")
+def database():
+    return render_template("database.html")
+
+@app.route("/telegram")
+def telegram():
+    return render_template("telegram.html")
+
+@app.route("/users")
+def users():
+    return render_template("users.html")
+
+@app.route("/whatsapp")
+def whatsapp():
+    return render_template("whatsapp.html")
 
 @app.route('/test')
 def test():

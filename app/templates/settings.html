@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block item_settings %}active{% endblock %}
+{% block title %}{{super()}} - Configurações {% endblock %}
+{% block content %}
+
+<div id="wrapper" >
+    <link href="{{ url_for('static', filename='css/settings.css')}}" rel="stylesheet">
+    
+    <div id="content-wrapper" >
+
+		<div class="container-fluid">
+
+			<!-- Breadcrumbdivs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item">
+				<a href="#">Dashboard</a>
+				</li>
+				<li class="breadcrumb-item active">Configurações</li>
+			</ol>
+			<div class="column">
+            	<div class="row">
+					<div class="col-lg-3 col-xs-6" onclick="location.href='telegram'">
+						<div class="rad-info-box rad-txt-success">
+							<span class="heading">Telegram</span>
+							<i class="fab fa-telegram-plane"></i>
+							<span class="value"><span>⠀</span></span>
+						</div>
+					</div>
+					<div class="col-lg-3 col-xs-6" onclick="location.href='whatsapp'">
+						<div class="rad-info-box rad-txt-primary">
+							<span class="heading">WhatsApp</span>
+							<i class="fab fa-whatsapp"></i>
+							<span class="value"><span>⠀</span></span>
+						</div>
+					</div>
+					<div class="col-lg-3 col-xs-6" onclick="location.href='database'">
+						<div class="rad-info-box rad-txt-danger">
+							<span class="heading">DataBase</span>
+							<i class="fas fa-database"></i>
+							<span class="value"><span>⠀</span></span>
+						</div>
+					</div>
+					<div class="col-lg-3 col-xs-6" onclick="location.href='users'">
+						<div class="rad-info-box rad-txt-warning">
+							<span class="heading">Users</span>
+							<i class="fas fa-users-cog"></i>
+							<span class="value"><span>⠀</span></span>
+						</div>
+					</div>
+				</div>
+				<!-- Row -->
+				
+			</div>
+			<!-- Column -->
+		</div>
+
+    </div>
+    <!-- /.content-wrapper -->
+  
+</div>
+  <!-- /#wrapper -->
+
+{% endblock %}
