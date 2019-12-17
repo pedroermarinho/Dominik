@@ -3,9 +3,9 @@ from flask_login import login_user, logout_user, login_required, current_user
 
 from app import app, db, login_manager
 
-from app.models.forms import LoginForm, RegisterForm, In_formallyForm
+from app.models.forms import LoginForm, RegisterForm, In_formallyForm,TelegramForm
 
-from app.models.tables import User
+from app.models.tables import User,TelegramToken
 
 from app.controllers.chat_bot import Dominik
 from app.controllers.filer import download_yml, delete_yml
@@ -31,7 +31,7 @@ def home():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
-        return render_template('index.html',psutil=psutil)
+        return render_template('index.html')
 
 
 @app.route('/about')
@@ -162,39 +162,77 @@ def logout():
 @app.route("/settings")
 @login_required
 def settings():
-    return render_template("settings.html")
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    else:
+        return render_template("settings.html")
 
 @app.route("/hardware")
 def hardware():
-    return render_template("hardware.html")
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    else:
+        return render_template("hardware.html")
 
 @app.route("/train")
 def train():
-    return render_template("train.html")
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    else:
+        return render_template("train.html")
 
 @app.route("/chatbot")
 def chatbot():
-    return render_template("chatbot.html")
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    else:
+        return render_template("chatbot.html")
 
-@app.route("/database")
+@app.route("/database", methods=["POST", "GET"])
 def database():
-    return render_template("database.html")
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    else:
+        return render_template("database.html")
 
-@app.route("/telegram")
+@app.route("/telegram", methods=["POST", "GET"])
 def telegram():
-    return render_template("telegram.html")
+    telegramForm = TelegramForm()
+    if telegramForm.validate_on_submit():
+        name = TelegramToken.query.filter_by(name=telegramForm.name.data).first()
+        token = TelegramToken.query.filter_by(token=telegramForm.token.data).first()
+        if name:
+            flash("Nome inválido")
+        elif token:
+            flash("Token inválido")
+        else:
+            i = TelegramToken(str(telegramForm.name.data), str(telegramForm.token.data))
+            db.session.add(i)
+            db.session.commit()
+            return redirect(url_for('telegram'))
 
-@app.route("/users")
+    return render_template('telegram.html', telegramForm=telegramForm, telegramData = TelegramToken.query.all())
+
+@app.route("/users", methods=["POST", "GET"])
 def users():
-    return render_template("users.html")
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    else:
+        return render_template("users.html")
 
-@app.route("/whatsapp")
+@app.route("/whatsapp", methods=["POST", "GET"])
 def whatsapp():
-    return render_template("whatsapp.html")
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    else:
+        return render_template("whatsapp.html")
 
 @app.route('/test')
 def test():
-    return render_template('test.html')
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    else:
+        return render_template('test.html')
 
 @app.route("/cpu")
 def get_cpu():
@@ -209,7 +247,7 @@ def get_swap():
     return str(dict(psutil.swap_memory()._asdict())["percent"])
 
 @app.route("/temperatures")
-def get_temperaturesp():
+def get_temperatures():
     return str(psutil.sensors_temperatures()["acpitz"][0].current)
    
 

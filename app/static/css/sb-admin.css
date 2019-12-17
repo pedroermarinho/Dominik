@@ -2024,6 +2024,7 @@ pre code {
   border: 0;
 }
 
+
 .form-control {
   display: block;
   width: 100%;
@@ -2042,6 +2043,11 @@ pre code {
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
 }
+
+.bnt-form-control{
+  width: 100%;
+  height: calc(1.5em + 0.75rem + 14.5px);
+  }
 
 @media (prefers-reduced-motion: reduce) {
   .form-control {
