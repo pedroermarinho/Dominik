@@ -11,13 +11,99 @@
                   <!-- Breadcrumbs-->
                   <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                        <a href="#">Dashboard</a>
+                        <a href="{{url_for('home')}}">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item">
                             <a href="{{url_for('settings')}}">Configurações</a>
                         </li>
                         <li class="breadcrumb-item active">DataBase</li>
-                  </ol>           
+                  </ol>
+                        <div class="card  mx-auto ">
+                              <div class="card-body">
+                              <form action="" method="post">
+                                    {{ dataBaseForm.csrf_token }}
+                                    <div class="form-group">
+                                          <div class="form-row">
+                                                <div class="col-md-6">
+                                                      <div class="form-label-group">
+                                                            {{ dataBaseForm.host(class="form-control", placeholder="name" , id="host",autofocus="autofocus" ) }}
+                                                            <label for="host">host</label>
+                                                      </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                      <div class="form-label-group">
+                                                            {{ dataBaseForm.database(class="form-control", placeholder="Usuário" , id="database") }}
+                                                            <label for="database">database</label>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <div class="form-group">
+                                          <div class="form-row">
+                                                <div class="col-md-6">
+                                                      <div class="form-label-group">
+                                                            {{ dataBaseForm.user(class="form-control", placeholder="Usuário" , id="user") }}
+                                                            <label for="user">Usuário</label>
+                                                      </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                      <div class="form-label-group">
+                                                            {{ dataBaseForm.password(id="password", class="form-control", placeholder="Password")}}
+                                                            <label for="password">Senha</label>
+                                                      </div>
+                                                </div>
+                                                
+                                          </div>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary btn-block" >Salvar</button>
+                        
+                              </form>
+                        
+                        </div>
+                  </div>
+            
+                  <br>        
+                  <!-- DataTables  -->
+                  <div class="card mb-3">
+                        <div class="card-header">
+                              <i class="fas fa-table"></i>
+                              Token Telegram
+                        </div>
+                        <div class="card-body">
+                              <div class="table-responsive">
+                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                              <thead>
+                                    <tr>
+                                          <th>ID</th>
+                                          <th>host</th>
+                                          <th>database</th>
+                                          <th>user</th>
+                                    </tr>
+                              </thead>
+                              <tfoot>
+                                    <tr>
+                                          <th>ID</th>
+                                          <th>host</th>
+                                          <th>database</th>
+                                          <th>user</th>
+                                    </tr>
+                              </tfoot>
+                              <tbody>
+                                    {% for data in dataBase %}
+                                    <tr>
+                                          <th>{{data.id}}</th>
+                                          <th>{{data.host}}</th>
+                                          <th>{{data.database}}</th>
+                                          <th>{{data.user}}</th>
+                                    </tr>
+                                    {% endfor %}
+                              </tbody>
+                              </table>
+                              </div>
+                        </div>
+                  </div>
+                  <!-- /.DataTables -->          
             </div>
     
         </div>

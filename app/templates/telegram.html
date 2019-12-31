@@ -11,43 +11,44 @@
               <!-- Breadcrumbs-->
               <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                    <a href="#">Dashboard</a>
+                    <a href="{{url_for('home')}}">Dashboard</a>
                     </li>
                     <li class="breadcrumb-item">
                         <a href="{{url_for('settings')}}">Configurações</a>
                     </li>
                     <li class="breadcrumb-item active">Telegram</li>
               </ol>
+              <div class="  mx-auto ">
+                <div class="card-body">
+                  <form action="" method="post">
+                    {{ telegramForm.csrf_token }}
 
-              <form action="" method="post">
-                {{ telegramForm.csrf_token }}
+                    <div class="form-group">
+                      <div class="form-row">
+                        <div class="col-md-5">
+                          <div class="form-label-group">
+                            {{ telegramForm.name(class="form-control", placeholder="name" , id="firstName",autofocus="autofocus" ) }}
+                            <label for="firstName">Name</label>
+                          </div>
+                        </div>
+                        <div class="col-md-5">
+                          <div class="form-label-group">
+                            {{ telegramForm.token(class="form-control", placeholder="Usuário" , id="lastName") }}
+                            <label for="lastName">Token</label>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-label-group">
+                            <button type="submit" class="btn btn-primary btn-block bnt-form-control" >Salvar</button>
+                          </div>
+                        </div>
+                      
+                      </div>
+                    </div>
 
-                <div class="form-group">
-                  <div class="form-row">
-                    <div class="col-md-5">
-                      <div class="form-label-group">
-                        {{ telegramForm.name(class="form-control", placeholder="name" , id="firstName",autofocus="autofocus" ) }}
-                        <label for="firstName">Name</label>
-                      </div>
-                    </div>
-                    <div class="col-md-5">
-                      <div class="form-label-group">
-                         {{ telegramForm.token(class="form-control", placeholder="Usuário" , id="lastName") }}
-                        <label for="lastName">Token</label>
-                      </div>
-                    </div>
-                    <div class="col-md-2">
-                      <div class="form-label-group">
-                        <button type="submit" class="btn btn-primary btn-block bnt-form-control" >Salvar</button>
-                      </div>
-                    </div>
-                   
-                  </div>
+                  </form>
                 </div>
-
-              </form>
-            
-                  
+              </div>    
                    <!-- DataTables  -->
             <div class="card mb-3">
                 <div class="card-header">
@@ -85,9 +86,7 @@
                 </div>
               </div>
           <!-- /.DataTables -->
-            </div>  <script>
-              document.getElementById("test").style.display == "inline"
-          </script>
+            </div>  
             <!-- /.content-fluid -->
         </div>
         <!-- /.content-wrapper -->

@@ -516,3 +516,5 @@ dmypy.json
 
 #tokens
 tokens/tokens.py
+
+*.pickle

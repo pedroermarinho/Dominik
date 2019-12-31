@@ -1,24 +1,26 @@
+import logging
+
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import time
-from app.controllers.chat_bot import Dominik
-from app.controllers.key_words import Palavra_Chave
-from app.models.functions_db import Database
-from app.controllers.commands import Comando
-from app.controllers.arduino_cmd import arduino_cmd
+from controller.chat_bot import Dominik
+from controller.key_words import PalavraChave
+from controller.functions_db import Database
+from controller.commands import Comando
+from controller.arduinocmd import ArduinoCMD
 from tokens.tokens import Tokens
 from threading import Thread
 
-arduino_comando = arduino_cmd()
+arduino_comando = ArduinoCMD()
 cmds = Comando(arduino_comando)
 main = Dominik(arduino_comando)
-Palavra_Chave = Palavra_Chave()
+Palavra_Chave = PalavraChave()
 base_de_dados = Database()
 
 try:
     telegram = telepot.Bot(Tokens.chave_token_telegram)  # endereço de acesso do bot
 except:
-    print('erro de conexão')
+    logging.error(str(__name__)+':erro de conexão')
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------
@@ -64,7 +66,7 @@ def chatbot(msg):
             # serve é id (endereço) do usuario e o segundo é a mensagem
             enviado = True
         except():
-            print('Mensagem não enviada: tentando novamente')
+            logging.error(str(__name__)+':Mensagem não enviada: tentando novamente')
             enviado = False
 
 
@@ -328,7 +330,7 @@ def telegram_on():
                # executada quando ela chega
                ).start()
     except():
-        print('Falha na conexão')
+        logging.error(str(__name__)+':Falha na conexão')
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 until
-sudo venv/bin/python3.7 telegram.py ;
+source venv/bin/activate;
+python3 run.py runserver;
  do
     echo "..."
     sleep 1

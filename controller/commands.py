@@ -1,28 +1,29 @@
+# -*- coding:utf-8  -*-
+import logging
 from datetime import datetime
-from app.controllers.key_words import Palavra_Chave
+from controller import key_words
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
-from app.models.functions_db import Database
-from app.controllers.arduino_cmd import arduino_cmd
+from controller import functions_db
 from threading import Thread
 
+
 class Comando:
-    print('class comando')
+    logging.warning(__name__)
 
-    palavra_chave = Palavra_Chave()
-    base_de_dados = Database()
-    global arduino_comando
-
-    def __init__(self, _arduino=arduino_cmd()):
+    def __init__(self, _arduino):
+        print(str(__name__) + '__init__')
         self.arduino_comando = _arduino
+        self.palavra_chave = key_words.PalavraChave()
+        self.base_de_dados = functions_db.Database()
+        self.comandos = None
+        self.dicionario_cmd = self.base_de_dados.get_cmds()
 
-    dicionario_cmd = {}  # criando um dicionario
-    comandos = None
-
-    dicionario_cmd = base_de_dados.get_cmds()
+    # dicionario_cmd = {}  # criando um dicionario
 
     def comando(self, cmd):  # pasar o comando // função
 
+        global comando, confianca
         try:  # except para probrelmas
             result = process.extract(cmd, self.dicionario_cmd.keys(), scorer=fuzz.token_sort_ratio, limit=1)
 
@@ -30,8 +31,8 @@ class Comando:
                 comando = y
                 confianca = i
 
-            print("comando->" + comando)
-            print("nivel de confiança->" + str(confianca))
+            logging.warning(str(__name__) + ':comando->' + str(comando))
+            logging.warning(str(__name__) + ':nivel de confiança->' + str(confianca))
 
             if (int(confianca) > 80):
                 return self.dicionario_cmd[comando]  # resultado do comando
@@ -42,9 +43,9 @@ class Comando:
             return None  # retorna a nada
 
     def Lista_comandos(self):  # função para lista os comandos
-        result = ''
+        result = None
         for cmd, msg in self.base_de_dados.get_mensagem_cmd():
-            if (cmd == 'msg_cmd'):
+            if cmd == 'msg_cmd':
                 result = msg
         return result
 

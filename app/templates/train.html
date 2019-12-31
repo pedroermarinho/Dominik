@@ -5,21 +5,73 @@
 
 
 <div id="wrapper">
+  <div id="content-wrapper">
 
-        <div id="content-wrapper">
-                <div class="container-fluid">
+     <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{url_for('home')}}">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Treinar</li>
+        </ol>
 
-                        <!-- Breadcrumbs-->
-                        <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                <a href="#">Dashboard</a>
-                                </li>
-                                <li class="breadcrumb-item active">Treinar</li>
-                        </ol>
-                </div>
-    
-    
+                      <!-- DataTables  -->
+    <div class="card mb-3">
+        <div class="card-header">
+          <i class="fas fa-table"></i>
+          Token Telegram
         </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                    <th>Categories</th>
+                    <th>Type</th>
+                    <th>Language</th>
+                    <th>Treinar</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                    <th>Categories</th>
+                    <th>Type</th>
+                    <th>Language</th>
+                    <th>Treinar</th>
+                </tr>
+              </tfoot>
+              <tbody>
+                {% for data in list_dic %}
+                    <tr>
+                        <td>{{data['categories']}}</td>
+                        <td>{{data['type']}}</td>
+                        <td>{{data['language']}}</td>
+                        <td>
+                            <button id="btnTrain{{data['categories']}}{{data['type']}}{{loop.index0}}" class="btn btn-primary btn-block" type="submit" name="Train_dic" value="{{data['file_url']}}">
+                                <i class="fas fa-brain"></i>
+                            </button>
+                              <script>
+                                function getTrain{{data['categories']}}{{data['type']}}{{loop.index0}}() {
+                                   let TrainData = $("#btnTrain{{data['categories']}}{{data['type']}}{{loop.index0}}").val();
+                                    $.get("/train", { Train_dic: TrainData });
+                                 }
+                                 $("#btnTrain{{data['categories']}}{{data['type']}}{{loop.index0}}").click(function() {
+                                     getTrain{{data['categories']}}{{data['type']}}{{loop.index0}}();
+                                     window.location.reload();
+                                  });
+                              </script>
+                    </td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+  <!-- /.DataTables -->
+  </div>
+</div>
         <!-- /.content-wrapper -->
 </div>
 <!-- /#wrapper -->

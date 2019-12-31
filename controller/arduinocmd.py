@@ -1,15 +1,23 @@
+# -*- coding:utf-8  -*-
+import logging
 from Arduino import Arduino
-
 import time
 import os
 import threading
 import platform
 
 
-class arduino_cmd:
-    print("Arduino")
+class ArduinoCMD:
+    """
+    Classe para controle de hardware do arduino uno
+    """
+    logging.warning(__name__)
 
     def __init__(self):
+        """
+            inicialização dos pinos
+        """
+        print(str(__name__)+'__init__')
         self.board = None
         self.LUZ_BANHEIRO_1 = int(9)  # ok
         self.LUZ_BANHEIRO_2 = int(12)  # ok
@@ -30,7 +38,7 @@ class arduino_cmd:
             self.board.digitalRead(0)
         except:
             if platform.system() in "Windows":
-                print(platform.system())
+                logging.warning(str(__name__) + ':'+str(platform.system()))
                 try:
                     self.board = Arduino("115200", port='COM1')  # plugged in via USB, serial com at rate 115200
                 except:
@@ -41,14 +49,16 @@ class arduino_cmd:
                             self.board = Arduino("115200", port="COM3")  # plugged in via USB, serial com at rate 115200
                         except:
                             try:
-                                self.board = Arduino("115200", port="COM4")  # plugged in via USB, serial com at rate 115200
+                                self.board = Arduino("115200",
+                                                     port="COM4")  # plugged in via USB, serial com at rate 115200
                             except:
                                 try:
                                     self.board = Arduino("115200",
                                                          port="COM5")  # plugged in via USB, serial com at rate 115200
                                 except:
                                     try:
-                                        self.board = Arduino(baud="115200")  # plugged in via USB, serial com at rate 115200
+                                        self.board = Arduino(
+                                            baud="115200")  # plugged in via USB, serial com at rate 115200
                                     except:
                                         pass
             else:
@@ -66,7 +76,8 @@ class arduino_cmd:
                         except:
                             try:
                                 os.system("ls -lh /dev/ttyUSB0")
-                                self.board = Arduino(port="/dev/ttyUSB0")  # plugged in via USB, serial com at rate 115200
+                                self.board = Arduino(
+                                    port="/dev/ttyUSB0")  # plugged in via USB, serial com at rate 115200
                             except:
                                 try:
                                     self.board = Arduino(baud="115200")  # plugged in via USB, serial com at rate 115200
@@ -88,198 +99,199 @@ class arduino_cmd:
                 self.board.pinMode(self.TELEVISAO, "OUTPUT")
 
             except:
-                print("erro conexão arduino")
+                logging.error(str(__name__)+":erro conexão arduino:")
+
 
     def cmd_luz_quarto_1_on(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_QUARTO_1, "HIGH")
-        except:
-            print("erro arduino ->cmd_luz_quarto_1_on")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_quarto_1_on:"+str(e))
             self.conexao()
 
     def cmd_luz_quarto_1_off(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_QUARTO_1, "LOW")
-        except:
-            print("erro arduino ->cmd_luz_quarto_1_off")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_quarto_1_off:"+str(e))
             self.conexao()
 
     def cmd_luz_quarto_2_on(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_QUARTO_2, "HIGH")
-        except:
-            print("erro arduino ->cmd_luz_quarto_2_on")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_quarto_2_on:"+str(e))
             self.conexao()
 
     def cmd_luz_quarto_2_off(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_QUARTO_2, "LOW")
-        except:
-            print("erro arduino ->cmd_luz_quarto_2_off")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_quarto_2_off:"+str(e))
             self.conexao()
 
     def cmd_luz_quarto_3_on(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_QUARTO_3, "HIGH")
-        except:
-            print("erro arduino ->cmd_luz_quarto_3_on")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_quarto_3_on:"+str(e))
             self.conexao()
 
     def cmd_luz_quarto_3_off(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_QUARTO_3, "LOW")
-        except:
-            print("erro arduino ->cmd_luz_quarto_3_off")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_quarto_3_off:"+str(e))
             self.conexao()
 
     def cmd_luz_banheiro_1_on(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_BANHEIRO_1, "HIGH")
-        except:
-            print("erro arduino ->cmd_luz_banheiro_1_on")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_banheiro_1_on:"+str(e))
             self.conexao()
 
     def cmd_luz_banheiro_1_off(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_BANHEIRO_1, "LOW")
-        except:
-            print("erro arduino ->cmd_luz_banheiro_1_off")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_banheiro_1_off:"+str(e))
             self.conexao()
 
     def cmd_luz_banheiro_2_on(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_BANHEIRO_2, "HIGH")
-        except:
-            print("erro arduino ->cmd_luz_banheiro_2_on")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_banheiro_2_on:"+str(e))
             self.conexao()
 
     def cmd_luz_banheiro_2_off(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_BANHEIRO_2, "LOW")
-        except:
-            print("erro arduino ->cmd_luz_banheiro_2_off")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_banheiro_2_off:"+str(e))
             self.conexao()
 
     def cmd_luz_sala_on(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_SALA, "HIGH")
-        except:
-            print("erro arduino ->cmd_luz_sala_on")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_sala_on:"+str(e))
             self.conexao()
 
     def cmd_luz_sala_off(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_SALA, "LOW")
-        except:
-            print("erro arduino ->cmd_luz_sala_off")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_sala_off:"+str(e))
             self.conexao()
 
     def cmd_luz_cozinha_on(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_COZINHA, "HIGH")
-        except:
-            print("erro arduino ->cmd_luz_cozinha_on")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_cozinha_on:"+str(e))
             self.conexao()
 
     def cmd_luz_cozinha_off(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_COZINHA, "LOW")
-        except:
-            print("erro arduino ->cmd_luz_cozinha_off")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_cozinha_off")
             self.conexao()
 
     def cmd_luz_sala_jantar_on(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_SALA_JANTAR, "HIGH")
-        except:
-            print("erro arduino ->cmd_luz_sala_jantar_on")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_sala_jantar_on:"+str(e))
             self.conexao()
 
     def cmd_luz_sala_jantar_off(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_SALA_JANTAR, "LOW")
-        except:
-            print("erro arduino ->cmd_luz_sala_jantar_off")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_sala_jantar_off:"+str(e))
             self.conexao()
 
     def cmd_luz_externa_entrada_on(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_EXTERNA_ENTRADA, "HIGH")
-        except:
-            print("erro arduino ->cmd_luz_externa_entrada_on")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_externa_entrada_on:"+str(e))
             self.conexao()
 
     def cmd_luz_externa_entrada_off(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_EXTERNA_ENTRADA, "LOW")
-        except:
-            print("erro arduino ->cmd_luz_externa_entrada_off")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_externa_entrada_off:"+str(e))
             self.conexao()
 
     def cmd_luz_externa_saida_on(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_EXTERNA_SAIDA, "HIGH")
-        except:
-            print("erro arduino ->cmd_luz_externa_saida_on")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_externa_saida_on:"+str(e))
             self.conexao()
 
     def cmd_luz_externa_saida_off(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_EXTERNA_SAIDA, "LOW")
-        except:
-            print("erro arduino ->cmd_luz_externa_saida_off")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_externa_saida_off:"+str(e))
             self.conexao()
 
     def cmd_luz_externa_lateral_on(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_EXTERNA_LATERAL, "HIGH")
-        except:
-            print("erro arduino ->cmd_luz_externa_lateral_on")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_externa_lateral_on:"+str(e))
             self.conexao()
 
     def cmd_luz_externa_lateral_off(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.LUZ_EXTERNA_LATERAL, "LOW")
-        except:
-            print("erro arduino ->cmd_luz_externa_lateral_off")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_luz_externa_lateral_off:"+str(e))
             self.conexao()
 
     def cmd_televisao_on(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.TELEVISAO, "HIGH")
-        except:
-            print("erro arduino ->cmd_televisao_on")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_televisao_on:"+str(e))
             self.conexao()
 
     def cmd_televisao_off(self):
         self.conexao()
         try:
             self.board.digitalWrite(self.TELEVISAO, "LOW")
-        except:
-            print("erro arduino ->cmd_televisao_off")
+        except IOError as e:
+            logging.error(str(__name__)+":erro arduino ->cmd_televisao_off:"+str(e))
             self.conexao()
 
     def status(self):
@@ -310,16 +322,16 @@ class arduino_cmd:
 
             status.update({"TELEVISAO": bool(self.board.digitalRead(self.TELEVISAO))})
 
-        except:
+        except IOError as e:
             self.conexao()
-            print("Erro:status")
+            logging.error(str(__name__)+":Erro:status:"+str(e))
 
-        print(status)
+        logging.warning(str(__name__) + ':'+str(status))
         return status
 
 
 if __name__ == "__main__":
-    arduino2 = arduino_cmd()
+    arduino2 = ArduinoCMD()
     while True:
         arduino2.cmd_luz_banheiro_1_on()  # certo
         arduino2.cmd_luz_banheiro_2_on()  # certo

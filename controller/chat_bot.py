@@ -1,66 +1,52 @@
 # -*- coding:utf-8  -*-
-import os
-from chatterbot.trainers import ListTrainer
 from chatterbot import ChatBot
-import yaml
-
-import urllib3
+from config import DATABASE_URI_CHAT_DEFAULT
 
 from chatterbot.trainers import ChatterBotCorpusTrainer
 
 import logging
-from app.controllers.key_words import Palavra_Chave
-from app.controllers.commands import Comando
-from app.models.functions_db import Database
-from tokens.tokens import Tokens
-from app.controllers.arduino_cmd import arduino_cmd
+from controller import key_words
+from controller import commands
+from controller import functions_db
+from controller import arduinocmd
 from threading import Thread
 
 
 class Dominik:  # class 3
-    global arduinoCmd
+    logging.warning(__name__)
 
-    def __init__(self, arduino=arduino_cmd()):
-        self.Comando = Comando(arduino)
+    def __init__(self):
+        print(str(__name__) + '__init__')
+        self.Comando = commands.Comando(arduinocmd.ArduinoCMD())
+        self.base_de_dados = functions_db.Database()
+        self.palavra_chaves = key_words.PalavraChave()
 
-    palavra_chaves = Palavra_Chave()
 
-    base_de_dados = Database()
+        self.DominikBot = ChatBot('DOMINIK',
+                                  # storage_adapter='chatterbot.storage.MongoDatabaseAdapter',
+                                  read_only=False,
+                                  # database_uri=Tokens.database
+                                  database_uri=DATABASE_URI_CHAT_DEFAULT
+                                  )  # criando um chat bot , com o nome Assitente
+        self.CalculadoraBot = ChatBot('CalculadoraBot',
+                                      logic_adapters=[
+                                          "chatterbot.logic.MathematicalEvaluation"
+                                      ]
+                                      # ,input_adapter="chatterbot.input.VariableInputTypeAdapter"
+                                      # ,output_adapter="chatterbot.output.OutputAdapter"
+                                      )
 
-    # # Enable info level logging
-    logging.basicConfig(level=logging.INFO)
-    DominikBot = ChatBot('DOMINIK',
-                         # storage_adapter='chatterbot.storage.MongoDatabaseAdapter',
-                         read_only=False,
-                         # database_uri=Tokens.database
-                         )  # criando um chat bot , com o nome Assitente
+        self.trainerDominikBot = ChatterBotCorpusTrainer(self.DominikBot)
 
-    CalculadoraBot = ChatBot('CalculadoraBot',
-                             logic_adapters=[
-                                 "chatterbot.logic.MathematicalEvaluation"
-                             ]
-                             # ,input_adapter="chatterbot.input.VariableInputTypeAdapter"
-                             # ,output_adapter="chatterbot.output.OutputAdapter"
-                             )
-
-    trainerDominikBot = ChatterBotCorpusTrainer(DominikBot)
-
-    print('\nOlá, Bem Vindo ao nosso bot :)\n')
+    logging.warning(str(__name__) + ':Olá, Bem Vindo ao nosso bot :)')
 
     def train(self, url):  # finção para treinar o chatteot com novos aquivos
-        # try:
+        try:
 
-        self.trainerDominikBot.train( "chatterbot.corpus.portuguese")
-        # http = urllib3.PoolManager()
-        # response = http.request('GET', str(url))
-        # data = response.data.decode('utf-8')
-        # yml_data = yaml.load(data)
-        #
-        # print(yml_data)
-        # self.trainerDominikBot.train(yml_data)  # trrinar o bot com as palavras
+            self.trainerDominikBot.train(url)
 
-        # except:
-        #     print("Erro função-> treino")
+        except:
+            print(str(__name__) + ":Erro função-> treino")
 
     def mensagem_bot_pergunta(self, text=None):  # função que ira tratar as mensagens
         if text is None:  # caso a função nao recebar nenhum parametro ele ira receber o parametro do terminal
@@ -74,7 +60,8 @@ class Dominik:  # class 3
         result = self.Comando.executar_cmd(
             self.Comando.comando(cmd))  # verifica se é um comando e se for retonara o resultado
         if result is None:  # verifica se é algum comado
-            result = self.palavra_chaves.pesquisa_na_wikipedia(cmd)  # verifica se é uma pesquisa , se for <retornara o resultado da pesquisa
+            result = self.palavra_chaves.pesquisa_na_wikipedia(
+                cmd)  # verifica se é uma pesquisa , se for <retornara o resultado da pesquisa
 
             if result is None:  # verifica se é algum comado
                 result = self.palavra_chaves.pesquisa_definicao(
@@ -110,8 +97,8 @@ class Dominik:  # class 3
                             result = self.DominikBot.get_response(
                                 cmd)  # mostra a resposta do bot de acordo com banco de dado
 
-                            print(result.confidence)
-                            print(result)
+                            logging.warning(str(__name__) + ':'+str(result.confidence))
+                            logging.warning(str(__name__) + ':'+str(result))
                             confiaca = result.confidence  # mostra o tao confiante a resposta é
                             if result.confidence <= 0.70:
                                 try:
@@ -119,11 +106,11 @@ class Dominik:  # class 3
                                            args=(cmd,)).start()  # grava nova palavra no banco de dado
                                     # self.base_de_dados.add_nova_palavra(cmd)  # grava nova palavra no banco de dado
                                 except:
-                                    print('\nErro: palavras\n')
+                                    logging.warning(str(__name__) + ':Erro: palavras')
 
                             if result.confidence <= 0.50:
                                 resposta = result
-                                print('\nErro: confiança menor que 0.:60', result, '\n')
+                                logging.warning(str(__name__) + ':Erro: confiança menor que 0.:60 ->'+ str(result))
                                 result = self.palavra_chaves.wikipedia(cmd)  # retorna uma pesquisa da wikipedia
 
                                 if result is None:
