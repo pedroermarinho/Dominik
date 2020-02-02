@@ -13,13 +13,16 @@ from threading import Thread
 
 
 class Dominik:  # class 3
+    """
+    Classe responsavel por gerenciar o ChatBot e a execução de comandos
+    """
     logging.warning(__name__)
 
     def __init__(self):
         print(str(__name__) + '__init__')
         self.Comando = commands.Comando(arduinocmd.ArduinoCMD())
         self.base_de_dados = functions_db.Database()
-        self.palavra_chaves = key_words.PalavraChave()
+        self.palavra_chaves = key_words.KeyWords()
 
 
         self.DominikBot = ChatBot('DOMINIK',
@@ -40,7 +43,12 @@ class Dominik:  # class 3
 
     logging.warning(str(__name__) + ':Olá, Bem Vindo ao nosso bot :)')
 
-    def train(self, url):  # finção para treinar o chatteot com novos aquivos
+    def train(self, url):
+        """
+        Função para treinar o chatteot com novos aquivos
+        :param url: caminho do arquivo que vai ser treinado
+        :return: None
+        """
         try:
 
             self.trainerDominikBot.train(url)
@@ -48,15 +56,25 @@ class Dominik:  # class 3
         except:
             print(str(__name__) + ":Erro função-> treino")
 
-    def mensagem_bot_pergunta(self, text=None):  # função que ira tratar as mensagens
+    def mensagem_bot_pergunta(self, text=None):
+        """
+        função que ira tratar as mensagens e verificar o metodo de entrada de texto
+
+        :param text: Texto a ser verificado
+        :return: String
+        """
         if text is None:  # caso a função nao recebar nenhum parametro ele ira receber o parametro do terminal
             return input('\nDigite algo:')
         else:
             return str(text)  # tranforma a variavel text em string
 
-    result_mensagem_bot_resposta = None
 
-    def mensagem_bot_resposta(self, cmd):  # função responsavel por gera uma reposta para a pergunta
+    def mensagem_bot_resposta(self, cmd):
+        """
+        função responsavel por gera uma reposta para a pergunta e executar comandos
+        :param cmd: Texto ou Comando á ser analizado e executado
+        :return: String
+        """
         result = self.Comando.executar_cmd(
             self.Comando.comando(cmd))  # verifica se é um comando e se for retonara o resultado
         if result is None:  # verifica se é algum comado
@@ -111,7 +129,7 @@ class Dominik:  # class 3
                             if result.confidence <= 0.50:
                                 resposta = result
                                 logging.warning(str(__name__) + ':Erro: confiança menor que 0.:60 ->'+ str(result))
-                                result = self.palavra_chaves.wikipedia(cmd)  # retorna uma pesquisa da wikipedia
+                                result = self.palavra_chaves.wikipedia_cmd(cmd)  # retorna uma pesquisa da wikipedia
 
                                 if result is None:
                                     result = 'Infelizmente não sei responder\nMas eu tenho ' + str(

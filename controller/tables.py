@@ -2,6 +2,9 @@ from app import db
 
 
 class User(db.Model):
+    """
+
+    """
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -36,6 +39,9 @@ class User(db.Model):
 
 
 class TelegramToken(db.Model):
+    """
+
+    """
     __tablename__ = "telegramtokens"
     id = db.Column(db.Integer, primary_key=True)
     token = db.Column(db.String, unique=True)
@@ -65,6 +71,9 @@ class TelegramToken(db.Model):
 
 
 class DataBase(db.Model):
+    """
+
+    """
     __tablename__ = "databases"
     id = db.Column(db.Integer, primary_key=True)
     host = db.Column(db.String)
@@ -89,6 +98,9 @@ class DataBase(db.Model):
 
 
 class Piada(db.Model):
+    """
+
+    """
     __tablename__ = "piadas"
     id = db.Column(db.Integer, primary_key=True)
     piada = db.Column(db.String, unique=True)
@@ -104,6 +116,9 @@ class Piada(db.Model):
 
 
 class Curiosidade(db.Model):
+    """
+
+    """
     __tablename__ = "curiosidades"
     id = db.Column(db.Integer, primary_key=True)
     curiosidade = db.Column(db.String, unique=True)
@@ -118,7 +133,10 @@ class Curiosidade(db.Model):
         return "<Nome %r>" % self.curiosidade
 
 
-class charada(db.Model):
+class Charada(db.Model):
+    """
+
+    """
     __tablename__ = "charadas"
     id = db.Column(db.Integer, primary_key=True)
     charada = db.Column(db.String, unique=True)
@@ -135,7 +153,10 @@ class charada(db.Model):
         return "<Nome %r>" % self.charada
 
 
-class citacao(db.Model):
+class Citacao(db.Model):
+    """
+
+    """
     __tablename__ = "citacoes"
     id = db.Column(db.Integer, primary_key=True)
     citacao = db.Column(db.String, unique=True)
@@ -152,7 +173,10 @@ class citacao(db.Model):
         return "<Nome %r>" % self.citacao
 
 
-class proverbio(db.Model):
+class Proverbio(db.Model):
+    """
+
+    """
     __tablename__ = "proverbios"
     id = db.Column(db.Integer, primary_key=True)
     proverbio = db.Column(db.String, unique=True)
@@ -169,7 +193,10 @@ class proverbio(db.Model):
         return "<Nome %r>" % self.proverbio
 
 
-class pergunta(db.Model):
+class Pergunta(db.Model):
+    """
+
+    """
     __tablename__ = "perguntas"
     id = db.Column(db.Integer, primary_key=True)
     pergunta = db.Column(db.String, unique=True)
@@ -186,7 +213,10 @@ class pergunta(db.Model):
         return "<Nome %r>" % self.pergunta
 
 
-class quiz(db.Model):
+class Quiz(db.Model):
+    """
+
+    """
     __tablename__ = "quiz"
     id = db.Column(db.Integer, primary_key=True)
     pergunta = db.Column(db.String, unique=True)
@@ -198,11 +228,11 @@ class quiz(db.Model):
     resposta = db.Column(db.Integer)
     url_imagem = db.Column(db.String)
 
-
     def get_id(self):
         return str(self.id)
 
-    def __init__(self, pergunta, alternativa1, alternativa2, alternativa3, alternativa4, alternativa5, resposta, url_imagem = None):
+    def __init__(self, pergunta, alternativa1, alternativa2, alternativa3, alternativa4, alternativa5, resposta,
+                 url_imagem=None):
         self.pergunta = pergunta
         self.alternativa1 = alternativa1
         self.alternativa2 = alternativa2

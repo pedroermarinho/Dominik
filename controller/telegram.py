@@ -4,7 +4,7 @@ import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import time
 from controller.chat_bot import Dominik
-from controller.key_words import PalavraChave
+from controller.key_words import KeyWords
 from controller.functions_db import Database
 from controller.commands import Comando
 from controller.arduinocmd import ArduinoCMD
@@ -13,8 +13,8 @@ from threading import Thread
 
 arduino_comando = ArduinoCMD()
 cmds = Comando(arduino_comando)
-main = Dominik(arduino_comando)
-Palavra_Chave = PalavraChave()
+main = Dominik()
+Palavra_Chave = KeyWords()
 base_de_dados = Database()
 
 try:
@@ -25,7 +25,12 @@ except:
 
 # ---------------------------------------------------------------------------------------------------------------------------------
 
-def recebendo_mensagem(msg):  # função que ira receber a mensagem
+def recebendo_mensagem(msg):  #
+    """
+    Função que irá receber a mensagem
+    :param msg: Mensagem recebida
+    :return:
+    """
 
     content_type, chat_type, chat_id = telepot.glance(msg)
 
@@ -74,6 +79,13 @@ def chatbot(msg):
 
 
 def Comandos(chat_id=0, quest='Teste', comando="0"):
+    """
+
+    :param chat_id:
+    :param quest:
+    :param comando:
+    :return:
+    """
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='Ligar', callback_data='cmd||1||' + str(comando) + '||0')],
         [InlineKeyboardButton(text='Desligar', callback_data='cmd||2||' + str(comando) + '||0')]
@@ -85,6 +97,11 @@ def Comandos(chat_id=0, quest='Teste', comando="0"):
 # ---------------------------------------------------------------------------------------------------------------------------------
 
 def Pergunta(chat_id=0):
+    """
+
+    :param chat_id:
+    :return:
+    """
     obj = base_de_dados.get_quiz()
     quest = obj[0]
     a = obj[1]
@@ -114,6 +131,11 @@ def Pergunta(chat_id=0):
 # ---------------------------------------------------------------------------------------------------------------------------------
 
 def Resposta(msg):
+    """
+
+    :param msg:
+    :return:
+    """
     query_id, chat_id, query_data = telepot.glance(msg, flavor='callback_query')
     parts = query_data.split('||')
     tipo = parts[0]
@@ -321,6 +343,10 @@ def Resposta(msg):
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 def telegram_on():
+    """
+
+    :return:
+    """
     try:
         Thread(target=
                telegram.message_loop({'chat': recebendo_mensagem,

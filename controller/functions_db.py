@@ -9,11 +9,12 @@ import os
 
 
 class Database:
+
     logging.warning(__name__)
 
     def __init__(self):
+
         print(str(__name__) + '__init__')
-        self.connection_on()
         self.keywords_wikipedia = []  # palavras chaves para pesquisas na wikipedia
         self.keywords_google = []  # palavras chaves para pesquisas no google
         self.definition_words = []  # palavras chaves para pesquisas no dicionario
@@ -21,8 +22,14 @@ class Database:
         self.dic_message_cmd = {}  # criando um dicionario comandos de menagem
         self.connection = None
         self.cursor = None
+        self.connection_on()
 
     def connection_on(self):
+        """
+
+
+        :return:
+        """
 
         try:
             # Abrimos uma conexão com o banco de dados:
@@ -30,12 +37,18 @@ class Database:
                                               passwd=Tokens.passwd)
             # Cria um cursor:
             self.cursor = self.connection.cursor()
-        except:
-            logging.error(str(__name__) + ":erro conexão banco de dados")
+        except pymysql.err.OperationalError as e:
+            logging.error(str(__name__) + ":erro conexão banco de dados:"+str(e))
             self.connection = None
             self.cursor = None
 
-    def add_base_de_users(self, _id, nome=None):
+    def add_base_de_users(self, _id: int, nome: str):
+        """
+
+        :param _id: ID do usuario
+        :param nome: Nome do usuario
+        :return:
+        """
         logging.warning("add_base_de_usuarios")
         if self.connection is not None:
             try:
@@ -43,91 +56,107 @@ class Database:
                     nome) + "\')")  # Executa o comando:
                 self.connection.commit()  # Efetua um commit no banco de dados.
 
-            except:
-                # logging.error(str(__name__)+":Erro função-> add_base_de_usuarios")
+            except Exception as e:
+                logging.error(str(__name__) + ":Erro função-> add_base_de_usuarios:"+str(e))
                 self.connection_on()
         else:
             logging.error(str(__name__) + ":sem conexão com o banco de dados ")
 
-    def add_new_word(self, nome=None):
+    def add_new_word(self, text: str):
         logging.warning("add_nova_palavra")
         if self.connection is not None:
             try:
                 self.cursor.execute("INSERT INTO `novas_palavras`(`texto`) VALUES (\'" + str(
-                    nome) + "\')")  # Executa o comando:
+                    text) + "\')")  # Executa o comando:
                 self.connection.commit()  # Efetua um commit no banco de dados.
 
-            except:
-                logging.error(str(__name__) + ":Erro função-> add_nova_palavra")
+            except Exception as e:
+                logging.error(str(__name__) + ":Erro função-> add_nova_palavra:"+str(e))
                 self.connection_on()
         else:
             logging.error(str(__name__) + ":sem conexão com o banco de dados ")
 
-    # adicione ponto positivo
-    def add_positive_point(self, cod, last_question):
+    def add_positive_point(self, _id: int, last_question):
+        """
+        Adiciona pontos positivos
+        :param _id: ID do usuario
+        :param last_question: ultima pergunta
+        :return:
+        """
         logging.warning("add_positive_point")
         if self.connection is not None:
             try:
-                self.cursor.execute("INSERT INTO usuario  VALUES (\'" + str(cod) + "\',\'" + str(2) + "\'," + str(
+                self.cursor.execute("INSERT INTO usuario  VALUES (\'" + str(_id) + "\',\'" + str(2) + "\'," + str(
                     last_question) + ")")  # Executa o comando:
                 self.connection.commit()  # Efetua um commit no banco de dados.
-            except :
+            except Exception as e:
                 try:
-                    ultima_pergunta_banco = self.get_last_question(cod)
+                    ultima_pergunta_banco = self.get_last_question(_id)
 
                     logging.warning(str(ultima_pergunta_banco) + "==" + str(last_question))
 
                     if ultima_pergunta_banco != last_question:
                         self.cursor.execute("UPDATE usuario SET pontuacao = (pontuacao + 2) WHERE id =\'" + str(
-                            cod) + "\'")  # Executa o comando:
+                            _id) + "\'")  # Executa o comando:
                         self.connection.commit()  # Efetua um commit no banco de dados.
                         self.cursor.execute(
                             "UPDATE usuario SET ultima_pergunta = " + str(last_question) + " WHERE id =\'" + str(
-                                cod) + "\'")
+                                _id) + "\'")
                         self.connection.commit()  # Efetua um commit no banco de dados.
 
-                except:
-                    logging.error(str(__name__) + ":Erro função-> add_pontucao_acetou")
+                except Exception as e:
+                    logging.error(str(__name__) + ":Erro função-> add_pontucao_acetou:"+str(e))
                     self.connection_on()
         else:
             logging.error(str(__name__) + ":sem conexão com o banco de dados ")
 
-    def add_negative_point(self, cod, ultima_pergunta):
-        logging.warning("add_pontucao_errou id =" + str(cod) + " ultima_pergunta =" + str(ultima_pergunta))
+    def add_negative_point(self, _id: int, last_question):
+        """
+        Adiciona pontos negativos
+        :param _id: ID do usuario
+        :param last_question: ultima pergunta
+        :return:
+        """
+        logging.warning("add_pontucao_errou id =" + str(_id) + " ultima_pergunta =" + str(last_question))
 
         if self.connection is not None:
             try:
-                self.cursor.execute("INSERT INTO usuario  VALUES (\'" + str(cod) + "\',\'" + str(-1) + "\'," + str(
-                    ultima_pergunta) + ")")  # Executa o comando:
+                self.cursor.execute("INSERT INTO usuario  VALUES (\'" + str(_id) + "\',\'" + str(-1) + "\'," + str(
+                    last_question) + ")")  # Executa o comando:
                 self.connection.commit()  # Efetua um commit no banco de dados.
-            except:
+            except Exception as e:
 
                 try:
-                    ultima_pergunta_banco = self.get_last_question(cod)
+                    ultima_pergunta_banco = self.get_last_question(_id)
 
-                    logging.warning(str(ultima_pergunta_banco) + "==" + str(ultima_pergunta))
+                    logging.warning(str(ultima_pergunta_banco) + "==" + str(last_question))
 
-                    if ultima_pergunta_banco != ultima_pergunta:
+                    if ultima_pergunta_banco != last_question:
                         self.cursor.execute("UPDATE usuario SET pontuacao = (pontuacao - 1)   WHERE id =\'" + str(
-                            cod) + "\'")  # Executa o comando:
+                            _id) + "\'")  # Executa o comando:
                         self.connection.commit()  # Efetua um commit no banco de dados.
                         self.cursor.execute(
-                            "UPDATE usuario SET ultima_pergunta = (" + str(ultima_pergunta) + ") WHERE id =\'" + str(
-                                cod) + "\'")  # Executa o comando:
+                            "UPDATE usuario SET ultima_pergunta = (" + str(last_question) + ") WHERE id =\'" + str(
+                                _id) + "\'")  # Executa o comando:
                         self.connection.commit()  # Efetua um commit no banco de dados.
 
-                except:
-                    logging.error(str(__name__) + ":Erro função-> add_pontucao_errou")
+                except Exception as e:
+                    logging.error(str(__name__) + ":Erro função-> add_pontucao_errou:"+str(e))
                     self.connection_on()
         else:
             logging.error(str(__name__) + ":sem conexão com o banco de dados ")
 
-    def get_last_question(self, cod):
+    def get_last_question(self, _id: int):
+        """
+
+        :param _id: ID do usuario
+        :return:
+        """
         logging.warning("get_ultima_resposta")
         if self.connection is not None:
             try:
                 self.connection.commit()  # Efetua um commit no banco de dados.
-                self.cursor.execute("SELECT ultima_pergunta FROM usuario WHERE id = \'" + str(cod) + "\'")
+                self.cursor.execute("SELECT ultima_pergunta FROM usuario WHERE id = \'" + str(_id) + "\'")
 
                 results = self.cursor.fetchall()
                 logging.warning(results)
@@ -138,18 +167,23 @@ class Database:
 
                 logging.warning(result)
                 return result
-            except:
-                logging.error(str(__name__) + ":Erro função-> get_ultima_resposta")
+            except Exception as e:
+                logging.error(str(__name__) + ":Erro função-> get_ultima_resposta:"+str(e))
                 self.connection_on()
                 return 0
         else:
             logging.error(str(__name__) + ":sem conexão com o banco de dados ")
 
-    def get_point(self, id):
+    def get_point(self, _id: int):
+        """
+
+        :param _id: ID do usuario
+        :return:
+        """
         logging.warning("get_pontuacao")
-        if (self.connection is not None):
+        if self.connection is not None:
             try:
-                self.cursor.execute("SELECT pontuacao FROM usuario WHERE id = \'" + str(id) + "\'")
+                self.cursor.execute("SELECT pontuacao FROM usuario WHERE id = \'" + str(_id) + "\'")
 
                 results = self.cursor.fetchall()
 
@@ -160,8 +194,8 @@ class Database:
 
                 logging.warning(result)
                 return result
-            except:
-                logging.error(str(__name__) + ":Erro função-> get_pontuacao")
+            except Exception as e:
+                logging.error(str(__name__) + ":Erro função-> get_pontuacao:"+str(e))
                 self.connection_on()
                 return 0
         else:
@@ -169,9 +203,10 @@ class Database:
 
     def add_curiosidade(self):
         logging.warning("add_curiosidade")
-        if (self.connection is not None):
+        if self.connection is not None:
             # try:
-            for _arquivo in os.listdir('assbot/ass_diversos/curiosidade'):  # percorrer todos os arquivos na pasta chats
+            for _arquivo in os.listdir('assbot/ass_diversos/curiosidade'):
+    # percorrer todos os arquivos na pasta chats
                 if _arquivo.endswith(".txt"):
                     logging.warning(_arquivo)  # mostrar o nome do aquivo que esta sendo lido
                     linhas = open('assbot/ass_diversos/curiosidade/' + _arquivo, 'r').readlines()  # vamos ler linhas
@@ -182,7 +217,8 @@ class Database:
                         self.connection.commit()  # Efetua um commit no banco de dados.
 
                     shutil.move('assbot/ass_diversos/curiosidade/' + _arquivo,
-                                'assbot/ass_diversos/curiosidade/ja_treinados/')  # mover os arquivos ja treinados para outra pasta para que não sejam treinados novamente
+                                'assbot/ass_diversos/curiosidade/ja_treinados/')
+                    # mover os arquivos ja treinados para outra pasta para que não sejam treinados novamente
             # except:
             #     logging.error(str(__name__)+":Erro função-> treino curiosidade")
         else:
@@ -190,7 +226,7 @@ class Database:
 
     def add_quiz(self):
         logging.warning("add_quiz")
-        if (self.connection is not None):
+        if self.connection is not None:
             # try:
             for _arquivo in os.listdir('assbot/quiz'):  # percorrer todos os arquivos na pasta chats
                 if _arquivo.endswith(".txt"):
@@ -200,21 +236,28 @@ class Database:
                         comando = comando.replace('\n', '')  # deletando as quebras de linha
                         parts = comando.split('||')  # separando mensaguem de comando // dicionario de comandos
                         self.cursor.execute(
-                            "INSERT INTO quiz (pergunta, alternativa1, alternativa2, alternativa3, alternativa4, alternativa5, resposta) VALUES (\'" + str(
+                            "INSERT INTO quiz (pergunta, alternativa1, alternativa2, alternativa3, alternativa4, "
+                            "alternativa5, resposta) VALUES (\'" + str(
                                 parts[0]) + "\',\'" + str(parts[1]) + "\',\'" + str(parts[2]) + "\',\'" + str(
                                 parts[3]) + "\',\'" + str(parts[4]) + "\',\'" + str(parts[5]) + "\',\'" + str(
                                 parts[6]) + "\')")
                         self.connection.commit()  # Efetua um commit no banco de dados.
                     shutil.move('assbot/quiz/' + _arquivo,
-                                'assbot/quiz/ja_treinados/')  # mover os arquivos ja treinados para outra pasta para que não sejam treinados novamente
+                                'assbot/quiz/ja_treinados/')
+                    # mover os arquivos ja treinados para outra pasta para que não sejam treinados novamente
             # except:
             #     logging.error(str(__name__)+":Erro função-> treino quiz")
         else:
             logging.error(str(__name__) + ":sem conexão com o banco de dados ")
 
     def Numero_aleatorio_piada(self):
+        """
+
+
+        :return:
+        """
         logging.warning("Numero_aleatorio_piada")
-        if (self.connection is not None):
+        if self.connection is not None:
             try:
                 self.cursor.execute("SELECT COUNT(*) FROM piadas")
                 conts = self.cursor.fetchall()
@@ -225,8 +268,8 @@ class Database:
                         cont = int(c)
 
                 return int(random.randint(0, int(cont) - 1))
-            except:
-                logging.error(str(__name__) + ":erro numero aleatorio piada")
+            except Exception as e:
+                logging.error(str(__name__) + ":erro numero aleatorio piada:"+str(e))
                 self.connection_on()
                 return int(0)
         else:
@@ -234,6 +277,10 @@ class Database:
             return None
 
     def Numero_aleatorio_quiz(self):
+        """
+
+        :return:
+        """
         logging.warning("Numero_aleatorio_quiz")
         if (self.connection is not None):
             try:
@@ -245,8 +292,8 @@ class Database:
                         cont = int(c)
 
                 return int(random.randint(0, int(cont) - 1))
-            except:
-                logging.error(str(__name__) + ":erro numero aleatorio quiz")
+            except Exception as e:
+                logging.error(str(__name__) + ":erro numero aleatorio quiz:"+str(e))
                 self.connection_on()
                 return int(1)
         else:
@@ -254,8 +301,12 @@ class Database:
             return None
 
     def Numero_aleatorio_curiosidade(self):
+        """
+
+        :return:
+        """
         logging.warning("Numero_aleatorio_curiosidade")
-        if (self.connection is not None):
+        if self.connection is not None:
             try:
                 self.cursor.execute("SELECT COUNT(*) FROM curiosidades")
                 conts = self.cursor.fetchall()
@@ -265,20 +316,25 @@ class Database:
                         cont = int(c)
 
                 return int(random.randint(0, int(cont) - 1))
-            except:
-                logging.error(str(__name__) + ":erro numero aleatorio curiosidade")
+            except Exception as e:
+                logging.error(str(__name__) + ":erro numero aleatorio curiosidade:"+str(e))
                 self.connection_on()
                 return int(0)
         else:
             logging.error(str(__name__) + ":sem conexão com o banco de dados ")
             return None
 
-    def get_piada(self, cod=None):
+    def get_piada(self, cod: int):
+        """
+
+        :param cod:
+        :return:
+        """
         logging.warning("get_piada")
         if cod is None:
             cod = self.Numero_aleatorio_piada()
         logging.warning(cod)
-        if (self.connection is not None):
+        if self.connection is not None:
             try:
                 self.cursor.execute("SELECT piada FROM piadas WHERE id = \'" + str(cod) + "\'")
 
@@ -290,19 +346,24 @@ class Database:
                         result = str(cod) + ")" + str(resposta)
 
                 return result
-            except:
-                logging.error(str(__name__) + ":erro get_piada")
+            except Exception as e:
+                logging.error(str(__name__) + ":erro get_piada:"+str(e))
                 self.connection_on()
                 return None
         else:
             logging.error(str(__name__) + ":sem conexão com o banco de dados ")
             return None
 
-    def get_curiosidade(self, cod=None):
+    def get_curiosidade(self, cod: int):
+        """
+
+        :param cod:
+        :return:
+        """
         logging.warning("get_curiosidade")
         if cod is None:
             cod = self.Numero_aleatorio_curiosidade()
-        if (self.connection is not None):
+        if self.connection is not None:
             try:
                 self.cursor.execute("SELECT curiosidade FROM curiosidades WHERE id = \'" + str(cod) + "\'")
 
@@ -313,8 +374,8 @@ class Database:
                     for resposta in res:
                         result = str(cod) + ")" + str(resposta)
                 return result
-            except:
-                logging.error(str(__name__) + ":erro get_quiz")
+            except Exception as e:
+                logging.error(str(__name__) + ":erro get_quiz:"+str(e))
                 self.connection_on()
                 return None
         else:
@@ -322,9 +383,13 @@ class Database:
             return None
 
     def get_definicao(self):
+        """
+
+        :return:
+        """
         logging.warning("get_definicao")
 
-        if (self.connection is not None):
+        if self.connection is not None:
             try:
                 self.cursor.execute("SELECT texto FROM definicao")
 
@@ -336,8 +401,8 @@ class Database:
                         self.definition_words.insert(n, resposta)
                         n = n + 1
                 return self.definition_words
-            except:
-                logging.error(str(__name__) + ":erro get_definicao")
+            except Exception as e:
+                logging.error(str(__name__) + ":erro get_definicao:"+str(e))
                 self.connection_on()
                 return None
         else:
@@ -347,7 +412,7 @@ class Database:
     def get_google(self):
         logging.warning("get_google")
 
-        if (self.connection is not None):
+        if self.connection is not None:
             try:
                 self.cursor.execute("SELECT texto FROM google")
 
@@ -359,8 +424,8 @@ class Database:
                         self.keywords_google.insert(n, resposta)
                         n = n + 1
                 return self.keywords_google
-            except:
-                logging.error(str(__name__) + ":erro get_google")
+            except Exception as e:
+                logging.error(str(__name__) + ":erro get_google:"+str(e))
                 self.connection_on()
                 return None
         else:
@@ -368,9 +433,13 @@ class Database:
             return None
 
     def get_wikipedia(self):
+        """
+
+        :return:
+        """
         logging.warning("get_wikipedia")
 
-        if (self.connection is not None):
+        if self.connection is not None:
             try:
                 self.cursor.execute("SELECT texto FROM wikipedia")
 
@@ -382,18 +451,23 @@ class Database:
                         self.keywords_wikipedia.insert(n, resposta)
                         n = n + 1
                 return self.keywords_wikipedia
-            except:
-                logging.error(str(__name__) + ":erro get_wikipedia")
+            except Exception as e:
+                logging.error(str(__name__) + ":erro get_wikipedia:"+str(e))
                 self.connection_on()
                 return None
         else:
             logging.error(str(__name__) + ":sem conexão com o banco de dados ")
             return None
 
+
     def get_cmds(self):
+        """
+
+        :return:
+        """
         logging.warning("get_cmds")
 
-        if (self.connection is not None):
+        if self.connection is not None:
             try:
                 self.cursor.execute("SELECT texto , cmd FROM cmds")
 
@@ -403,8 +477,8 @@ class Database:
                     self.dic_cmd.update(
                         {parts[0]: parts[1]})  # colocados dentro da lista as mensagens e os comandos
                 return self.dic_cmd
-            except:
-                logging.error(str(__name__) + ":erro get_cmds")
+            except Exception as e:
+                logging.error(str(__name__) + ":erro get_cmds:"+str(e))
                 self.connection_on()
                 return None
         else:
@@ -412,9 +486,13 @@ class Database:
             return None
 
     def get_mensagem_cmd(self):
+        """
+
+        :return:
+        """
         logging.warning("get_cmds")
 
-        if (self.connection is not None):
+        if self.connection is not None:
             try:
                 self.cursor.execute("SELECT cmd , texto  FROM mensagem_cmd")
 
@@ -424,26 +502,32 @@ class Database:
                     self.dic_message_cmd.update(
                         {parts[0]: parts[1]})  # colocados dentro da lista as mensagens e os comandos
                 return self.dic_message_cmd
-            except:
-                logging.error(str(__name__) + ":erro get_cmds")
+            except Exception as e:
+                logging.error(str(__name__) + ":erro get_cmds:"+str(e))
                 self.connection_on()
                 return None
         else:
             logging.error(str(__name__) + ":sem conexão com o banco de dados ")
             return None
 
-    def get_quiz(self, cod=None):
+    def get_quiz(self, cod: int):
+        """
+
+        :param cod:
+        :return:
+        """
         dicionario_quest = []
         logging.warning("get_quiz")
         if cod is None:
             cod = self.Numero_aleatorio_quiz()
         logging.warning(cod)
 
-        if (self.connection is not None):
+        if self.connection is not None:
             try:
 
                 self.cursor.execute(
-                    "SELECT pergunta, alternativa1, alternativa2, alternativa3, alternativa4, alternativa5, resposta FROM quiz WHERE id = \'" + str(
+                    "SELECT pergunta, alternativa1, alternativa2, alternativa3, alternativa4, alternativa5, resposta "
+                    "FROM quiz WHERE id = \'" + str(
                         cod) + "\'")
 
                 results = self.cursor.fetchall()
@@ -464,17 +548,21 @@ class Database:
 
                 logging.warning(dicionario_quest)
                 return dicionario_quest[0].copy()
-            except:
-                logging.error(str(__name__) + ":erro get_quiz")
+            except Exception as e:
+                logging.error(str(__name__) + ":erro get_quiz:"+str(e))
                 self.connection_on()
                 return None
         else:
             logging.error(str(__name__) + ":sem conexão com o banco de dados ")
-            # return None
+            return None
 
     def fechar_conexao(self):
+        """
+
+        :return:
+        """
         logging.warning("fechar_conexao")
-        if (self.connection is not None):
+        if self.connection is not None:
             # Finaliza a conexão
             self.connection.close()
             logging.warning("conexao fechada")

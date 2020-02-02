@@ -518,3 +518,4 @@ dmypy.json
 tokens/tokens.py
 
 *.pickle
+sentence_tokenizer.pickle

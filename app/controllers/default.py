@@ -33,6 +33,10 @@ def load_user(user_id):
 @app.route('/index')
 @app.route('/')
 def home():
+    """
+    Página principal
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -41,6 +45,10 @@ def home():
 
 @app.route('/about')
 def about():
+    """
+    Página de informações
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -49,6 +57,10 @@ def about():
 
 @app.route('/blank')
 def blank():
+    """
+    Página sem nada
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -57,6 +69,10 @@ def blank():
 
 @app.route('/charts')
 def charts():
+    """
+    Página de exemplos de graficos
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -66,6 +82,11 @@ def charts():
 @app.errorhandler(404)
 @app.route('/404')
 def not_found(e=None):
+    """
+    Página de erro
+    :param e:
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -74,6 +95,10 @@ def not_found(e=None):
 
 @app.route('/forgot-password')
 def forgotpassword():
+    """
+    Página para recuperar a senha
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -82,6 +107,10 @@ def forgotpassword():
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
+    """
+    Página de login
+    :return:
+    """
     login_form = LoginForm()
     if User.query.count() is 0:
         return redirect(url_for("register"))
@@ -98,7 +127,12 @@ def login():
 
 
 @app.route('/register', methods=["POST", "GET"])
+@login_required
 def register():
+    """
+    Página para regitrar novos usuarios
+    :return:
+    """
     register_form = RegisterForm()
     if register_form.validate_on_submit():
         user = User.query.filter_by(username=register_form.username.data).first()
@@ -123,6 +157,10 @@ def register():
 
 @app.route('/tables_dic', methods=['GET', 'POST'])
 def tables_dic():
+    """
+    Página de tabelas com os dicionarios disponiveis
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -147,6 +185,10 @@ def tables_dic():
 
 @app.route('/base')
 def base():
+    """
+    Página base para toda a contrução das outras paginas
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -155,6 +197,10 @@ def base():
 
 @app.route('/logout')
 def logout():
+    """
+    função para sair do sistema(logout)
+    :return:
+    """
     logout_user()
     flash("Logger out.")
     return redirect(url_for('login'))
@@ -163,6 +209,10 @@ def logout():
 @app.route("/settings")
 @login_required
 def settings():
+    """
+    Página para o menu de configuração
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -171,6 +221,10 @@ def settings():
 
 @app.route("/hardware")
 def hardware():
+    """
+    Página para a configuração do hardware
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -179,7 +233,10 @@ def hardware():
 
 @app.route("/train")
 def train():
-
+    """
+    Página para fazer o treinamento do chatbot
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -195,6 +252,10 @@ def train():
 
 @app.route("/chatbot")
 def chatbot():
+    """
+    Página com um terminal para teste com chatbot
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -204,6 +265,10 @@ def chatbot():
 
 @app.route("/database", methods=["POST", "GET"])
 def database():
+    """
+    Página para configurar os bancos de dados
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -230,6 +295,10 @@ def database():
 
 @app.route("/telegram", methods=["POST", "GET"])
 def telegram():
+    """
+    Página para fazer a configuração da interface de cominicação com o telegram
+    :return:
+    """
     telegramForm = TelegramForm()
     if telegramForm.validate_on_submit():
         name = TelegramToken.query.filter_by(name=telegramForm.name.data).first()
@@ -252,6 +321,10 @@ def telegram():
 
 @app.route("/users", methods=["POST", "GET"])
 def users():
+    """
+    Página para gerenciar os usuarios
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -260,6 +333,10 @@ def users():
 
 @app.route("/whatsapp", methods=["POST", "GET"])
 def whatsapp():
+    """
+    Página para fazer a configuração da interface de cominicação com o whatsapp
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -268,6 +345,10 @@ def whatsapp():
 
 @app.route('/test')
 def test():
+    """
+    Página de teste
+    :return:
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
@@ -276,26 +357,46 @@ def test():
 
 @app.route("/cpu")
 def get_cpu():
+    """
+    Função para verificar o uso da cpu
+    :return: retornar em porcentagem (%)
+    """
     return str(psutil.cpu_percent())
 
 
 @app.route("/ram")
 def get_ram():
+    """
+    Função para verificar o uso da memoria ram
+    :return: retornar em porcentagem (%)
+    """
     return str(dict(psutil.virtual_memory()._asdict())["percent"])
 
 
 @app.route("/swap")
 def get_swap():
+    """
+    Função para verificar o uso da memoria swap
+    :return: retornar em porcentagem (%)
+    """
     return str(dict(psutil.swap_memory()._asdict())["percent"])
 
 
 @app.route("/temperatures")
 def get_temperatures():
+    """
+    Função para verificar a temperatura do dispositivo
+    :return: retornar em C°
+    """
     return str(psutil.sensors_temperatures()["acpitz"][0].current)
 
 
 @app.route("/get")
 def get_bot_response():
+    """
+    Função que reposavel por fazer algumas operações
+    :return:
+    """
     download_dic = request.args.get('download_dic')
     update_dic = request.args.get('update_dic')
     delete_dic = request.args.get('delete_dic')

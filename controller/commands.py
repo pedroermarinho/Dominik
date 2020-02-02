@@ -14,27 +14,30 @@ class Comando:
     def __init__(self, _arduino):
         print(str(__name__) + '__init__')
         self.arduino_comando = _arduino
-        self.palavra_chave = key_words.PalavraChave()
+        self.palavra_chave = key_words.KeyWords()
         self.base_de_dados = functions_db.Database()
         self.comandos = None
-        self.dicionario_cmd = self.base_de_dados.get_cmds()
+        self.dicionario_cmd = self.base_de_dados.get_cmds
 
     # dicionario_cmd = {}  # criando um dicionario
 
-    def comando(self, cmd):  # pasar o comando // função
+    def comando(self, cmd):
+        """
+        Verificação do texto e transcrição para comando
 
-        global comando, confianca
+        :param cmd: Texto a ser verificado e transcrito para comando
+        :return: Se positivo retorna ao comando e se falso retorna a None
+        """
+
         try:  # except para probrelmas
             result = process.extract(cmd, self.dicionario_cmd.keys(), scorer=fuzz.token_sort_ratio, limit=1)
 
-            for y, i in result:
-                comando = y
-                confianca = i
+            comando, confianca = result
 
             logging.warning(str(__name__) + ':comando->' + str(comando))
             logging.warning(str(__name__) + ':nivel de confiança->' + str(confianca))
 
-            if (int(confianca) > 80):
+            if int(confianca) > 80:
                 return self.dicionario_cmd[comando]  # resultado do comando
             else:
                 return None
@@ -42,14 +45,24 @@ class Comando:
             print("erro piada")
             return None  # retorna a nada
 
-    def Lista_comandos(self):  # função para lista os comandos
+    def Lista_comandos(self):
+        """
+        Função para listar os comandos
+        :return: String
+        """
         result = None
         for cmd, msg in self.base_de_dados.get_mensagem_cmd():
             if cmd == 'msg_cmd':
                 result = msg
         return result
 
-    def executar_cmd(self, cmd):  # função para execuatr os comandos
+    def executar_cmd(self, cmd):
+        """
+        Função para execuatr os comandos
+
+        :param cmd: Comando a ser executado
+        :return: String
+        """
         if cmd == '/start':
             resultado = None
             for cmd, msg in self.base_de_dados.get_mensagem_cmd():
