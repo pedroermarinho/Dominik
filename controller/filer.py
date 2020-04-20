@@ -3,7 +3,6 @@ import os.path
 import requests
 import urllib3
 import yaml
-import json
 
 from config import DIR_DIC_YML
 
@@ -12,13 +11,14 @@ from config import DIR_DIC_YML
 """
 
 
-def download_yml(url, name: str) -> bool:
+def download_yml(url: str, name: str) -> bool:
     """
     Download de arquivos yml
     :param url: localização do arquivo yml
     :param name: Nome que será dado ao arquivo
     :return: True para finalizado e False para falha
     """
+
     http = urllib3.PoolManager()
     response = http.request('GET', url)
     yml_data = yaml.load(response.data.decode('utf-8'))
@@ -28,7 +28,7 @@ def download_yml(url, name: str) -> bool:
     try:
         os.makedirs(file)
     except OSError as e:
-        print(str(e))
+        print(str(__name__) + ':def -> download_yml:' + str(e))
         pass
     try:
         with open(file_name, "wb") as f:
@@ -50,17 +50,18 @@ def download_yml(url, name: str) -> bool:
         return True
     except FileNotFoundError as e:
         print("arquivo não encontrado")
-        print(str(e))
+        print(str(__name__) + ':def -> download_yml:' + str(e))
         return False
 
 
-def delete_yml(url, name: str) -> bool:
+def delete_yml(url: str, name: str) -> bool:
     """
     Delatar arquivos yml
     :param url: url do arquivo para recuperar dados utlizados para encontrar o diretorio correto
     :param name: Nome do arquivo a ser deletado
     :return: Não tem retorno
     """
+
     http = urllib3.PoolManager()
     response = http.request('GET', url)
     yml_data = yaml.load(response.data.decode('utf-8'))
@@ -71,43 +72,63 @@ def delete_yml(url, name: str) -> bool:
         os.remove(file_name)
         return True
     except OSError as e:
-        print(str(e))
+        print(str(__name__) + ':def -> delete_yml:' + str(e))
         return False
 
 
-def verify_file_yml(json_data) -> bool:
+def verify_file_yml(data: dict) -> bool:
     """
     Verificar a existencia de uma arquivo yml
-    :param json_data: Dados para encontrar o arquivo
+    :param data: Dados para encontrar o arquivo
     :return: retorna True se exitir e False caso não exista
+
+    Exemplo:
+
+    {
+        'nome': 'IA',
+        'url': 'https://pedroermarinho.github.io/Dominik-dic/src/yml/formally/PT-BR/ai.yml',
+        'type': 'yml',
+        'language': 'PT-BR',
+        'category': 'conversations',
+        'subcategory': 'ai',
+        'classification': 'formally'
+    }
     """
-    json_data = str(json_data)
-    json_data = json_data.replace("\'", "\"")
-    json_data = json.loads(json_data)
-    file = os.path.join(DIR_DIC_YML, json_data["classification"], json_data["language"])
-    file_name = os.path.join(file, json_data["subcategory"] + ".yml")
+
+    file = os.path.join(DIR_DIC_YML, data["classification"], data["language"])
+    file_name = os.path.join(file, data["subcategory"] + ".yml")
 
     return os.path.isfile(file_name)
 
 
-def verify_update_file_yml(json_data) -> bool:
+def verify_update_file_yml(data: dict) -> bool:
     """
     Verificar se um arquivo local está desatualizado em relação ao arquivo remoto
-    :param json_data: Dados para encontrar o arquivo e realizar a comparação 
+    :param data: Dados para encontrar o arquivo e realizar a comparação
     :return: retorna True se o arquivo estiver desatualizado e False caso esteja atulalizado
+
+    Exemplo:
+
+    {
+        'nome': 'IA',
+        'url': 'https://pedroermarinho.github.io/Dominik-dic/src/yml/formally/PT-BR/ai.yml',
+        'type': 'yml',
+        'language': 'PT-BR',
+        'category': 'conversations',
+        'subcategory': 'ai',
+        'classification': 'formally'
+    }
     """
-    json_data = str(json_data)
-    json_data = json_data.replace("\'", "\"")
-    json_data = json.loads(json_data)
-    yml_url = json_data["url"]
-    file = os.path.join(DIR_DIC_YML, json_data["classification"], json_data["language"])
-    file_name = os.path.join(file, json_data["subcategory"] + ".yml")
+
+    yml_url = data["url"]
+    file = os.path.join(DIR_DIC_YML, data["classification"], data["language"])
+    file_name = os.path.join(file, data["subcategory"] + ".yml")
 
     try:
         with open(file_name, 'r', encoding='utf-8') as yaml_file:
             yaml_Obj = yaml.load(yaml_file)
     except FileNotFoundError as e:
-        print(str(e))
+        print(str(__name__) + ':def -> verify_update_file_yml:' + str(e))
         return False
 
     http = urllib3.PoolManager()
@@ -138,7 +159,7 @@ def list_file_yml_dic() -> list:
                             with open(file_name, 'r', encoding='utf-8') as yaml_file:
                                 yaml_Obj = yaml.load(yaml_file)
                         except FileNotFoundError as e:
-                            print(str(e))
+                            print(str(__name__) + ':def -> list_file_yml_dic:' + str(e))
                             return result
 
                         result.append({
@@ -149,7 +170,7 @@ def list_file_yml_dic() -> list:
                         })
         return result
     except IOError as e:
-        print(str(e))
+        print(str(__name__) + ':def -> list_file_yml_dic:' + str(e))
         return result
 
 

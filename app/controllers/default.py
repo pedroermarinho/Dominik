@@ -412,17 +412,17 @@ def get_bot_response():
         pass
     elif download_dic is not None:
         # print("download_dic")
+
         download_dic = download_dic.replace("\'", "\"")
         download_dic = json.loads(download_dic)
         download_yml(download_dic["url"], download_dic["subcategory"])
         flash("Download do arquivo " + download_dic["subcategory"] + " concluído com sucesso")
         return ""
     elif update_dic is not None:
-        # print("update_dic")
         update_dic = update_dic.replace("\'", "\"")
         update_dic = json.loads(update_dic)
-        download_yml(download_dic["url"], download_dic["subcategory"])
-        flash("Atualização do arquivo " + download_dic["subcategory"] + " concluído com sucesso")
+        download_yml(update_dic["url"], update_dic["subcategory"])
+        flash("Atualização do arquivo " + update_dic["subcategory"] + " concluído com sucesso")
         return ""
     elif delete_dic is not None:
         # print("delete_dic")
