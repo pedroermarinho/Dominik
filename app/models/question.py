@@ -1,5 +1,4 @@
 class quest(object):
-    global pergunta, questA, questB, questC, questD, questE, resposta
 
     def __init__(self):
         self.pergunta = None

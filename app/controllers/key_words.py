@@ -5,7 +5,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import googlesearch
 
-from controller import functions_db
+from app.controllers import functions_db
 
 
 class KeyWords(object):
@@ -33,17 +33,18 @@ class KeyWords(object):
         result = None  # resultado
         if self.palavras_chaves_wikipedia is not None:
             for chave in self.palavras_chaves_wikipedia:  # percorrer as palavras chaves
-
+                print(chave)
                 if text.lower().startswith(chave.lower()):  # verifrica se texto começa com alguma palavra chave
                     result = text.lower().replace(chave.lower(), '')  # texto atual menos a chave utilizada
 
         if result is not None:  # verifica se result não é nulo
             result = self.wikipedia_cmd(str(result))
 
-        if result is None:
-            return 'Não foi poss�vel fazer a pesquisa'
-        else:
-            return result
+        # if result is None:
+        #     # return 'Não foi poss�vel fazer a pesquisa'
+        #     return None
+        # else:
+        return result
 
     @staticmethod
     def wikipedia_cmd(text: str):
@@ -108,10 +109,10 @@ class KeyWords(object):
         if result is not None:  # verifica se result não é nulo
             result = self.definicao(result)
 
-        if result is None:
-            return 'Não foi poss�vel fazer a pesquisa'
-        else:
-            return result
+        # if result is None:
+        #     return 'Não foi poss�vel fazer a pesquisa'
+        # else:
+        return result
 
     @staticmethod
     def definicao(text: str):

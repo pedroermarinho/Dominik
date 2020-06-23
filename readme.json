@@ -18,8 +18,8 @@
   "license_url": "https://github.com/pedroermarinho/Dominik/blob/master/LICENSE",
   "issues_url": "https://github.com/pedroermarinho/Dominik/issues",
   "license": "MIT",
-  "install_command": ["pip3 install requirements.txt"],
-  "usage_command": ["python3 run.py runserver"],
+  "install_command": ["pip3 install requirements.txt","flask db migrate","flask db upgrade","flask db init "],
+  "usage_command": ["flask run"],
   "test_command": null,
 
   "repository": {

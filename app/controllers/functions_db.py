@@ -2,7 +2,7 @@
 import logging
 import pymysql
 import random
-from model.question import quest
+from app.models.question import quest
 from tokens.tokens import Tokens
 import shutil
 import os

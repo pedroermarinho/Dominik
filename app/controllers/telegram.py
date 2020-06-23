@@ -3,11 +3,11 @@ import logging
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import time
-from controller.chat_bot import Dominik
-from controller.key_words import KeyWords
-from controller.functions_db import Database
-from controller.commands import Comando
-from controller.arduinocmd import ArduinoCMD
+from app.modules.chat_bot.controller.chat_bot import Dominik
+from app.controllers.key_words import KeyWords
+from app.controllers.functions_db import Database
+from app.controllers.commands import Comando
+from app.modules.arduino.arduinocmd import ArduinoCMD
 from tokens.tokens import Tokens
 from threading import Thread
 

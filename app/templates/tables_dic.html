@@ -92,7 +92,7 @@
                       <script>
                         function getDownload{{link.subcategory}}() {
                            let downloadData = $("#btnDow{{link.subcategory}}").val();
-                            $.get("/get", { download_dic: downloadData });
+                            $.get("/train/download", { download_dic: downloadData });
                          }
                          $("#btnDow{{link.subcategory}}").click(function() {
                              getDownload{{link.subcategory}}();
@@ -107,7 +107,7 @@
                       <script>
                         function getUpdate{{link.subcategory}}() {
                            let updateData = $("#btnUp{{link.subcategory}}").val();
-                            $.get("/get", { update_dic: updateData });
+                            $.get("/train/update", { update_dic: updateData });
                          }
                          $("#btnUp{{link.subcategory}}").click(function() {
                              getUpdate{{link.subcategory}}();
@@ -122,7 +122,7 @@
                       <script>
                         function getDelete{{link.subcategory}}() {
                            let deleteData = $("#btnDlt{{link.subcategory}}").val();
-                            $.get("/get", { delete_dic: deleteData });
+                            $.get("/train/delete", { delete_dic: deleteData });
                          }
                          $("#btnDlt{{link.subcategory}}").click(function() {
                              getDelete{{link.subcategory}}();

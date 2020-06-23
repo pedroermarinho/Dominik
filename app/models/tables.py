@@ -1,4 +1,5 @@
-from app import db
+# from app import db
+from app.controllers.database import db
 
 
 class User(db.Model):
@@ -248,9 +249,9 @@ class Quiz(db.Model):
 # class Post(db.Model):
 #     __tablename__ = "posts"
 
-#     id = db.Column(db.Integer, primary_key=True)
-#     content = db.Column(db.Text)
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+#     id = db.db.Column(db.db.Integer, primary_key=True)
+#     content = db.db.Column(db.Text)
+#     user_id = db.db.Column(db.db.Integer, db.ForeignKey('users.id'))
 
 #     # user = db.relationship('User', foreign_key=user_id)
 
@@ -265,9 +266,9 @@ class Quiz(db.Model):
 # class Follow(db.Model):
 #     __tablename__ = "follow"
 
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-#     follower_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+#     id = db.db.Column(db.db.Integer, primary_key=True)
+#     user_id = db.db.Column(db.db.Integer, db.ForeignKey('users.id'))
+#     follower_id = db.db.Column(db.db.Integer, db.ForeignKey('users.id'))
 
 #     # user = db.relationship('User', foreign_key=user_id)
 #     # follower = db.relationship('User', foreign_key=follower_id)

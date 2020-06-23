@@ -1,22 +1,20 @@
 # -*- coding:utf-8  -*-
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate, MigrateCommand
-from flask_script import Manager
-from flask_login import LoginManager
+from app.modules import init_app
+from app.controllers.database import init_db
+from app.modules.chat_bot import init_chat_bot
+from app.modules.arduino import init_arduino
+from app.modules.services import init_services
 
 
-app = Flask(__name__)
-app.config.from_object('configFlask')
+def create_app():
+    app: Flask = Flask(__name__)
+    app.config.from_object('configFlask')
 
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+    init_db(app)
+    init_app(app)
+    init_services(app)
+    init_chat_bot(app)
+    init_arduino(app)
 
-manager = Manager(app)
-manager.add_command('db', MigrateCommand)
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-from app.models import forms
-from app.controllers import default
+    return app

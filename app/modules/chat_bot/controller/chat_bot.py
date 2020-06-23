@@ -5,10 +5,8 @@ from config import DATABASE_URI_CHAT_DEFAULT
 from chatterbot.trainers import ChatterBotCorpusTrainer
 
 import logging
-from controller import key_words
-from controller import commands
-from controller import functions_db
-from controller import arduinocmd
+from app.controllers import key_words, commands, functions_db
+from app.modules.arduino import arduinocmd
 from threading import Thread
 
 
@@ -23,7 +21,6 @@ class Dominik:  # class 3
         self.Comando = commands.Comando(arduinocmd.ArduinoCMD())
         self.base_de_dados = functions_db.Database()
         self.palavra_chaves = key_words.KeyWords()
-
 
         self.DominikBot = ChatBot('DOMINIK',
                                   # storage_adapter='chatterbot.storage.MongoDatabaseAdapter',
@@ -67,7 +64,6 @@ class Dominik:  # class 3
             return input('\nDigite algo:')
         else:
             return str(text)  # tranforma a variavel text em string
-
 
     def mensagem_bot_resposta(self, cmd):
         """
@@ -115,10 +111,11 @@ class Dominik:  # class 3
                             result = self.DominikBot.get_response(
                                 cmd)  # mostra a resposta do bot de acordo com banco de dado
 
-                            logging.warning(str(__name__) + ':'+str(result.confidence))
-                            logging.warning(str(__name__) + ':'+str(result))
-                            confiaca = result.confidence  # mostra o tao confiante a resposta é
-                            if result.confidence <= 0.70:
+                            logging.warning(str(__name__) + ':' + str(result.confidence))
+                            logging.warning(str(__name__) + ':' + str(result))
+                            confidence = result.confidence  # mostra o tao confiante a resposta é
+                            result = str(confidence) + "->" + str(result)
+                            if confidence <= 0.70:
                                 try:
                                     Thread(target=self.base_de_dados.add_new_word,
                                            args=(cmd,)).start()  # grava nova palavra no banco de dado
@@ -126,14 +123,14 @@ class Dominik:  # class 3
                                 except:
                                     logging.warning(str(__name__) + ':Erro: palavras')
 
-                            if result.confidence <= 0.50:
+                            if confidence <= -1:
                                 resposta = result
-                                logging.warning(str(__name__) + ':Erro: confiança menor que 0.:60 ->'+ str(result))
+                                logging.warning(str(__name__) + ':Erro: confiança menor que 0.:60 ->' + str(result))
                                 result = self.palavra_chaves.wikipedia_cmd(cmd)  # retorna uma pesquisa da wikipedia
 
                                 if result is None:
                                     result = 'Infelizmente não sei responder\nMas eu tenho ' + str(
-                                        int(confiaca * 100)) + '% de confiança que a reposta correta é: \n' + str(
+                                        int(confidence * 100)) + '% de confiança que a reposta correta é: \n' + str(
                                         resposta)
         return result  # retorna ao resultado
 

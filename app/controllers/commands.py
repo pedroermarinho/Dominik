@@ -1,10 +1,9 @@
 # -*- coding:utf-8  -*-
 import logging
 from datetime import datetime
-from controller import key_words
+from app.controllers import key_words, functions_db
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
-from controller import functions_db
 from threading import Thread
 
 
